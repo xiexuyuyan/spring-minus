@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+    id 'kotlin'
+    id 'application'
+}
+
+group 'com.yuyan'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation "org.jetbrains.kotlin:kotlin-gradle-plugin"
+    compile(project(':framework'))
+}
+
+sourceSets {
+    main {
+        java ['srcDirs'] = ['src']
+    }
+    test {
+        java ['srcDirs'] = ['test']
+    }
+}
+
+mainClassName  = 'com.yuyan.Application'
+
+jar {
+    manifest {
+        attributes 'Main-Class':'com.yuyan.Application'
+    }
+    from {
+        configurations.compileClasspath.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
