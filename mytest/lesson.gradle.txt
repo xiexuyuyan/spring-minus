@@ -1,0 +1,174 @@
+task ta{println "ta"}
+task tb{println "tb"}
+ta.finalizedBy(tb)
+
+task printVersion(dependsOn: [ta, tb]) {
+    group = 'ver group'
+    description = 'des verion'
+
+    doLast {
+        println "version is : $version"
+        logger.quiet "Version: $version"
+    }
+}
+
+task printVersion {
+    logger.quiet "printVersion: Version: $version"
+}
+
+printVersion.doFirst {
+    println "start to print version"
+}
+
+task tc(dependsOn: printVersion){
+    doFirst {
+        println "tc: first"
+    }
+    println "tc: cur"
+    doLast {
+        println "tc: last"
+    }
+}
+
+
+
+
+
+
+
+
+/** *******************************************************/
+plugins {
+    id 'java'
+    id 'kotlin'
+    id 'application'
+}
+
+group 'com.yuyan'
+version '0.1'
+
+ext {
+    versionFile = file('version.properties')
+}
+
+class ProjectVersion {
+    Integer major
+    Integer minor
+    Boolean release
+
+    ProjectVersion(Integer major, Integer minor) {
+        this.major = major
+        this.minor = minor
+        this.release = Boolean.FALSE
+    }
+
+    ProjectVersion(Integer major, Integer minor, Boolean release) {
+        this(major, minor)
+        this.release = release
+    }
+
+    @Override
+    String toString() {
+        "$major.$minor${release ? '' : '-SNAPSHOT'}"
+    }
+}
+
+task loadVersion {
+    project.version = readVersion()
+}
+
+ProjectVersion readVersion() {
+    logger.quiet ''
+
+    if (!versionFile.exists()) {
+        throw new GradleException("Required version file not exists: " +
+                "$versionFile.canoncialPath")
+    }
+
+    Properties versionProps = new Properties()
+
+    versionFile.withInputStream {stream ->
+        versionProps.load(stream)
+    }
+
+    Integer major = versionProps.major.toInteger()
+    Integer minor = versionProps.minor.toInteger()
+    Boolean release = versionProps.release.toBoolean()
+
+    new ProjectVersion(major, minor, release)
+}
+
+task makeReleaseVersion(group: 'versioning'
+        , description: 'Make project a release version.') {
+    inputs.property('release', version.release)
+    outputs.file(versionFile)
+
+    doLast {
+        version.release = true
+        ant.propertyfile(file: versionFile) {
+            entry(
+                    key: 'release'
+                    , type: 'string'
+                    , operation: '='
+                    , value: 'true'
+            )
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation "org.jetbrains.kotlin:kotlin-gradle-plugin"
+    compile(project(':framework'))
+}
+
+sourceSets {
+    main {
+        java ['srcDirs'] = ['src']
+    }
+    test {
+        java ['srcDirs'] = ['test']
+    }
+}
+
+mainClassName  = 'com.yuyan.Application'
+
+jar {
+    manifest {
+        attributes 'Main-Class':'com.yuyan.Application'
+    }
+    from {
+        configurations.compileClasspath.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+
+task printVersion {
+    doLast {
+        logger.quiet "printVersion: Version: $version"
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

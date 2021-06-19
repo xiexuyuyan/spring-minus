@@ -5,7 +5,76 @@ plugins {
 }
 
 group 'com.yuyan'
-version '1.0-SNAPSHOT'
+version '0.1'
+
+ext {
+    versionFile = file('version.properties')
+}
+
+class ProjectVersion {
+    Integer major
+    Integer minor
+    Boolean release
+
+    ProjectVersion(Integer major, Integer minor) {
+        this.major = major
+        this.minor = minor
+        this.release = Boolean.FALSE
+    }
+
+    ProjectVersion(Integer major, Integer minor, Boolean release) {
+        this(major, minor)
+        this.release = release
+    }
+
+    @Override
+    String toString() {
+        "$major.$minor${release ? '' : '-SNAPSHOT'}"
+    }
+}
+
+task loadVersion {
+    project.version = readVersion()
+}
+
+ProjectVersion readVersion() {
+    logger.quiet ''
+
+    if (!versionFile.exists()) {
+        throw new GradleException("Required version file not exists: " +
+                "$versionFile.canoncialPath")
+    }
+
+    Properties versionProps = new Properties()
+
+    versionFile.withInputStream {stream ->
+        versionProps.load(stream)
+    }
+
+    Integer major = versionProps.major.toInteger()
+    Integer minor = versionProps.minor.toInteger()
+    Boolean release = versionProps.release.toBoolean()
+
+    new ProjectVersion(major, minor, release)
+}
+
+task makeReleaseVersion(group: 'versioning'
+        , description: 'Make project a release version.') {
+    inputs.property('release', version.release)
+    outputs.file(versionFile)
+
+    doLast {
+        version.release = true
+        ant.propertyfile(file: versionFile) {
+            entry(
+                    key: 'release'
+                    , type: 'string'
+                    , operation: '='
+                    , value: 'true'
+            )
+        }
+    }
+}
 
 repositories {
     mavenCentral()
@@ -37,4 +106,15 @@ jar {
             it.isDirectory() ? it : zipTree(it)
         }
     }
+}
+
+task printVersion {
+    doLast {
+        logger.quiet "printVersion: Version: $version"
+    }
+}
+
+task backup(type: Copy, dependsOn: jar) {
+    from jar.outputs.files
+    into "out"
 }
