@@ -1,4 +1,3 @@
 rootProject.name = 'Vicar'
 include ':application'
 include ':framework'
-include ':mytest'
