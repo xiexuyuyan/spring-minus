@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm'
+    id 'kotlin-kapt'
 }
 
 group 'com.yuyan'
@@ -13,6 +14,8 @@ repositories {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     compile(project(':framework'))
+    compile(project(':PrintAnnotation'))
+    kapt(project(':PrintAnnotation'))
 }
 
 sourceSets {
