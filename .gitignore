@@ -1,6 +1,4 @@
 /.idea/
 /.gradle/
 /tomcat.6699/
-/application/build/
-/framework/build/
-/PrintAnnotation/build/
+/*/build/

@@ -1,6 +1,6 @@
 package com.yuyan.service;
 
-import com.yuyan.beans.Bean;
+import org.yuyan.beans.Bean;
 
 @Bean
 public class SalaryService {

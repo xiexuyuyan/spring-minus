@@ -13,9 +13,9 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
-    compile(project(':framework'))
-    compile(project(':PrintAnnotation'))
-    kapt(project(':PrintAnnotation'))
+    compile(project(':spring-mvc'))
+    // compile(project(':PrintAnnotation'))
+    // kapt(project(':PrintAnnotation'))
 }
 
 sourceSets {

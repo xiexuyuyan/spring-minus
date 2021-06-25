@@ -1,10 +1,10 @@
 package com.yuyan.controllers;
 
-import com.yuyan.beans.AutoWired;
+import org.yuyan.beans.AutoWired;
 import com.yuyan.service.SalaryService;
-import com.yuyan.web.mvc.Controller;
-import com.yuyan.web.mvc.RequestMapping;
-import com.yuyan.web.mvc.RequestParam;
+import org.yuyan.web.mvc.Controller;
+import org.yuyan.web.mvc.RequestMapping;
+import org.yuyan.web.mvc.RequestParam;
 
 @Controller
 public class SalaryController {

@@ -1,4 +1,4 @@
 rootProject.name = 'Vicar'
 include ':application'
-include ':framework'
+include ':spring-mvc'
 include ':PrintAnnotation'

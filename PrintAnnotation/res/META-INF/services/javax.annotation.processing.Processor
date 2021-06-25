@@ -1,2 +1,2 @@
-com.yuyan.annotation.ButPrintAnnotationProcessor
-com.yuyan.annotation.JustPrintAnnotationProcessor
+org.yuyan.annotation.ButPrintAnnotationProcessor
+org.yuyan.annotation.JustPrintAnnotationProcessor
