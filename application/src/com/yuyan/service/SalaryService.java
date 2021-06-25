@@ -1,6 +1,6 @@
 package com.yuyan.service;
 
-import org.yuyan.beans.Bean;
+import org.yuyan.springmvc.beans.Bean;
 
 @Bean
 public class SalaryService {

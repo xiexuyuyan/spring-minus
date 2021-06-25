@@ -1,4 +1,4 @@
-package org.yuyan.core;
+package org.yuyan.springmvc.core;
 
 import java.io.IOException;
 import java.net.JarURLConnection;

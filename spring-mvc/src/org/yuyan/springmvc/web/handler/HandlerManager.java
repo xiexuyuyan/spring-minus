@@ -1,8 +1,8 @@
-package org.yuyan.web.handler;
+package org.yuyan.springmvc.web.handler;
 
-import org.yuyan.web.mvc.Controller;
-import org.yuyan.web.mvc.RequestMapping;
-import org.yuyan.web.mvc.RequestParam;
+import org.yuyan.springmvc.web.mvc.Controller;
+import org.yuyan.springmvc.web.mvc.RequestMapping;
+import org.yuyan.springmvc.web.mvc.RequestParam;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;

@@ -1,6 +1,6 @@
-package org.yuyan.web.server;
+package org.yuyan.springmvc.web.server;
 
-import org.yuyan.web.servlet.DispatchServlet;
+import org.yuyan.springmvc.web.servlet.DispatchServlet;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.core.StandardContext;

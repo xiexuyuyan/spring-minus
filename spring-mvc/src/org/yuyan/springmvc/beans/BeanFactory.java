@@ -1,6 +1,6 @@
-package org.yuyan.beans;
+package org.yuyan.springmvc.beans;
 
-import org.yuyan.web.mvc.Controller;
+import org.yuyan.springmvc.web.mvc.Controller;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

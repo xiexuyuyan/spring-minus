@@ -1,4 +1,4 @@
-package org.yuyan.annotation;
+package org.yuyan.printannotation;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;

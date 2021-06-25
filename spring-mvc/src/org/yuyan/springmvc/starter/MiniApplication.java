@@ -1,9 +1,9 @@
-package org.yuyan.starter;
+package org.yuyan.springmvc.starter;
 
-import org.yuyan.beans.BeanFactory;
-import org.yuyan.core.ClassScanner;
-import org.yuyan.web.handler.HandlerManager;
-import org.yuyan.web.server.TomcatServer;
+import org.yuyan.springmvc.beans.BeanFactory;
+import org.yuyan.springmvc.core.ClassScanner;
+import org.yuyan.springmvc.web.handler.HandlerManager;
+import org.yuyan.springmvc.web.server.TomcatServer;
 
 import java.util.List;
 

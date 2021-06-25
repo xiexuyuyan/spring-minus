@@ -1,4 +1,4 @@
-package org.yuyan.web.servlet;
+package org.yuyan.springmvc.web.servlet;
 
 import javax.servlet.*;
 import java.io.IOException;

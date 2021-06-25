@@ -1,4 +1,4 @@
-package org.yuyan.web.mvc;
+package org.yuyan.springmvc.web.mvc;
 
 import java.lang.annotation.*;
 

@@ -1,6 +1,6 @@
-package org.yuyan.web.handler;
+package org.yuyan.springmvc.web.handler;
 
-import org.yuyan.beans.BeanFactory;
+import org.yuyan.springmvc.beans.BeanFactory;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 
 import javax.servlet.ServletRequest;

@@ -1,4 +1,4 @@
-package org.yuyan.annotation;
+package org.yuyan.printannotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.METHOD)
-public @interface ButPrint {
+public @interface JustPrint {
     String value();
 }

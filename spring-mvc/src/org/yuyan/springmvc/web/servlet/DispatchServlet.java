@@ -1,7 +1,7 @@
-package org.yuyan.web.servlet;
+package org.yuyan.springmvc.web.servlet;
 
-import org.yuyan.web.handler.HandlerManager;
-import org.yuyan.web.handler.MappingHandler;
+import org.yuyan.springmvc.web.handler.HandlerManager;
+import org.yuyan.springmvc.web.handler.MappingHandler;
 
 import javax.servlet.*;
 import java.io.IOException;
