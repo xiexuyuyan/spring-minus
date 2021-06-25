@@ -1,4 +1,4 @@
-package room.framework.database
+package org.yuyan.room.database
 
 import kotlin.reflect.KClass
 

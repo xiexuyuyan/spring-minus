@@ -1,4 +1,4 @@
-package room.framework.base
+package org.yuyan.room.base
 
 class Room {
     companion object {
