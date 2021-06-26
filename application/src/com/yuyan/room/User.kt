@@ -1,8 +1,8 @@
-package room.applying
+package com.yuyan.room
 
-import room.framework.enty.ColumnInfo
-import room.framework.enty.Entity
-import room.framework.enty.PrimaryKey
+import org.yuyan.room.entity.ColumnInfo
+import org.yuyan.room.entity.Entity
+import org.yuyan.room.entity.PrimaryKey
 
 @Entity
 data class User (
