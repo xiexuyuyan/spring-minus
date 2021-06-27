@@ -10,17 +10,12 @@ import javax.lang.model.element.TypeElement;
 import java.util.Set;
 
 
-@SupportedAnnotationTypes("com.yuyan.annotation.ButPrint")
+@SupportedAnnotationTypes("org.yuyan.printannotation.ButPrint")
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class ButPrintAnnotationProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        for (TypeElement typeElement : annotations) {
-            for (Element element : roundEnv.getElementsAnnotatedWith(typeElement)) {
-                ButPrint print = element.getAnnotation(ButPrint.class);
-                System.out.println(print.value());
-            }
-        }
-        return true;
+        System.out.println("But: " + annotations);
+        return false;
     }
 }

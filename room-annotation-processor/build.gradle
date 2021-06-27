@@ -13,6 +13,9 @@ repositories {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     implementation(project(':room'))
+
+    // https://mvnrepository.com/artifact/com.squareup/kotlinpoet
+    implementation group: 'com.squareup', name: 'kotlinpoet', version: '1.7.2'
 }
 sourceSets {
     main {

@@ -8,11 +8,11 @@ import org.yuyan.room.dao.Query
 
 @Dao
 interface UserDao {
-    @Query("")
-    fun getAll(): List<User>
+    @Query("sentence")
+    fun getAll(): MutableList<User>
 
     @Insert
-    fun insert(vararg user: User)
+    fun insert(userList: MutableList<User>)
 
     @Delete
     fun delete(user: User)

@@ -1,85 +1,85 @@
 package org.yuyan.room.annotation.processor
 
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.TypeSpec
 import org.yuyan.room.base.RoomDatabase
 import org.yuyan.room.database.Database
-import org.yuyan.room.database.DatabasePoet
 import javax.annotation.processing.*
 import javax.lang.model.SourceVersion
 import javax.lang.model.element.*
-import javax.lang.model.type.TypeMirror
 import javax.lang.model.util.ElementFilter
-import kotlin.reflect.KClass
 
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedAnnotationTypes("org.yuyan.room.database.Database")
 class DatabaseAnnotationProcessor: AbstractProcessor() {
-
-    private lateinit var filer: Filer
-    private val databaseAnnotationKClass: KClass<*> = Database::class
-    private val databaseAnnotationJClass: Class<Database> = Database::class.java
-    private val databaseAnnotationCanonicalName: String = databaseAnnotationJClass.canonicalName
-
-    override fun init(processingEnv: ProcessingEnvironment?) {
-        super.init(processingEnv)
-        filer = processingEnv!!.filer
-    }
-
-    override fun getSupportedAnnotationTypes(): MutableSet<String> {
-        return arrayOf(databaseAnnotationCanonicalName).toHashSet()
-    }
-
     override fun process(annotations: MutableSet<out TypeElement>?
                          , roundEnv: RoundEnvironment?): Boolean {
-
-        when (roundEnv?.processingOver()) {
-            true -> return false
+        if (!ifProcess(annotations, roundEnv)) {
+            return false
         }
 
+        val targetAnnotationName: String = supportedAnnotationTypes.elementAt(0)
+        println(targetAnnotationName)
+        val annotatedTypeElements = findAnnotatedTypeElementByName(targetAnnotationName
+            , roundEnv?.rootElements)
+        annotatedTypeElements.forEach {element ->
 
-        roundEnv?.rootElements.let { inputElements ->// class list in env to apply processor
-            inputElements?.forEach {inputElement ->// class loaded in env to apply processor
-                // traverse all input elements and find the target annotation
-                val databaseAnnotationTypeElement = findTypeElementByAnnotationMirrors(databaseAnnotationCanonicalName, inputElement)
-                databaseAnnotationTypeElement?.let {dbElement ->
-                    val pkgName: String = dbElement.enclosingElement.toString()
-                    val clsName: String = (dbElement.qualifiedName.toString()).split("$pkgName.")[1]
-                    // println(pkgName + "." + clsName)
-
-                    val dbSuperElement: TypeElement = processingEnv.typeUtils.asElement(dbElement.superclass) as TypeElement
-                    val superPkgName: String = dbSuperElement.enclosingElement.toString()
-                    val superClsName: String = (dbSuperElement.qualifiedName.toString()).split("$superPkgName.")[1]
-                    // println(superPkgName + "." + superClsName)
-
-                    DatabasePoet().generatedDatabaseImpl(pkgName, clsName, superPkgName, superClsName, filer)
-                }
+            val clsBuilder = formClassBuilder(element)
+            println("class: ${clsBuilder.build().name}")
+            ElementFilter.methodsIn(element.enclosedElements).forEach {
+                println("method:${it.modifiers} ${it.simpleName}")
             }
         }
-
         return false
     }
 
 
 
-    private fun findTypeElementByAnnotationMirrors(clsName: String, element: Element): TypeElement?{
-        val mirrors = element.annotationMirrors
-        mirrors.forEach { annotationMirror ->
-            when (annotationMirror.annotationType.toString()) {
-                clsName -> {
-                    return element as TypeElement
-                }
-            }
-        }
-        return null
-    }
 
-    private fun findTypeElementByTypeMirrors(clsName: String, mirror: TypeMirror){
-        val mirrors = mirror.annotationMirrors
-        mirrors.forEach { annotationMirror ->
-            println(annotationMirror.annotationType.toString())
-            when (annotationMirror.annotationType.toString()) {
-                clsName -> {
-                    // println(clsName)
+
+
+
+
+
+
+
+
+
+
+    /*roundEnv?.rootElements.let { inputElements ->// class list in env to apply processor
+        inputElements?.forEach {inputElement ->// class loaded in env to apply processor
+            // traverse all input elements and find the target annotation
+            val databaseAnnotationTypeElement = findTypeElementByAnnotationMirrors("", inputElement)
+            databaseAnnotationTypeElement?.let {dbElement ->
+                val pkgName: String = dbElement.enclosingElement.toString()
+                val clsName: String = (dbElement.qualifiedName.toString()).split("$pkgName.")[1]
+                // println(pkgName + "." + clsName)
+
+                val dbSuperElement: TypeElement = processingEnv.typeUtils.asElement(dbElement.superclass) as TypeElement
+                val superPkgName: String = dbSuperElement.enclosingElement.toString()
+                val superClsName: String = (dbSuperElement.qualifiedName.toString()).split("$superPkgName.")[1]
+                // println(superPkgName + "." + superClsName)
+
+                val databaseClass = ClassName(pkgName, clsName)
+
+                DatabasePoet().generatedDatabaseImpl(pkgName, clsName, superPkgName, superClsName, filer)
+            }
+        }
+    }*/
+
+/*    private fun findAnnotatedTypeElementByName(clsName: String, inputElements: MutableSet<out Element>?): HashSet<TypeElement>{
+        val annotatedTypeElements = HashSet<TypeElement>()
+        inputElements?.forEach { element ->
+            val mirrors = element.annotationMirrors
+            mirrors.forEach { annotationMirror ->
+                when (annotationMirror.annotationType.toString()) {
+                    clsName -> {
+                        annotatedTypeElements.add(element = element as TypeElement)
+                    }
                 }
             }
         }
-    }
+        return annotatedTypeElements
+    }*/
 }

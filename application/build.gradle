@@ -13,11 +13,11 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
-    compile(project(':spring-mvc'))
-    compile(project(':room'))
-    // compile(project(':PrintAnnotation'))
+    implementation(project(':spring-mvc'))
+    implementation(project(':room'))
+    // implementation(project(':PrintAnnotation'))
     // kapt(project(':PrintAnnotation'))
-    compile(project(':room-annotation-processor'))
+    implementation(project(':room-annotation-processor'))
     kapt(project(':room-annotation-processor'))
 }
 

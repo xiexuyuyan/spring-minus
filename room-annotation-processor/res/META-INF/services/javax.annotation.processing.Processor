@@ -1,1 +1,2 @@
 org.yuyan.room.annotation.processor.DatabaseAnnotationProcessor
+org.yuyan.room.annotation.processor.DaoAnnotationProcessor
