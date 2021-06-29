@@ -1,10 +1,5 @@
-package org.yuyan.room.annotation.processor
+package org.yuyan.room.annotation.processor.temp
 
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.FunSpec
-import com.squareup.kotlinpoet.TypeSpec
-import org.yuyan.room.base.RoomDatabase
-import org.yuyan.room.database.Database
 import javax.annotation.processing.*
 import javax.lang.model.SourceVersion
 import javax.lang.model.element.*
@@ -12,7 +7,7 @@ import javax.lang.model.util.ElementFilter
 
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedAnnotationTypes("org.yuyan.room.database.Database")
-class DatabaseAnnotationProcessor: AbstractProcessor() {
+class TDatabaseAnnotationProcessor: AbstractProcessor() {
     override fun process(annotations: MutableSet<out TypeElement>?
                          , roundEnv: RoundEnvironment?): Boolean {
         if (!ifProcess(annotations, roundEnv)) {
