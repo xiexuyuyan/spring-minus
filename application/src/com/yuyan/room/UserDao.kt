@@ -9,7 +9,7 @@ import org.yuyan.room.dao.Query
 @Dao
 interface UserDao {
     @Query("sentence")
-    fun getAll()
+    fun getAll(): List<User>
 
     @Insert
     fun insert(vararg users: User)

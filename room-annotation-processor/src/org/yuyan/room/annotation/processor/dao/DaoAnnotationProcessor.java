@@ -4,28 +4,33 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
-import org.yuyan.room.annotation.processor.temp.AnnotationProcessorHelper;
+import org.yuyan.room.annotation.processor.helper.AnnotationProcessorHelper;
 import org.yuyan.room.dao.Dao;
+import org.yuyan.room.dao.Delete;
+import org.yuyan.room.dao.Insert;
+import org.yuyan.room.dao.Query;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeKind;
+import javax.lang.model.util.ElementFilter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.lang.annotation.Annotation;
+import java.util.*;
 
 import static java.lang.System.out;
 
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
-public class DaoAnnotationProcessor extends AbstractProcessor {
+public class DaoAnnotationProcessor extends AbstractProcessor implements DaoProcessable {
     private final List<Class<?>> supportClassList = new ArrayList<>();
+    private final static List<Class<? extends Annotation>> curdList = new ArrayList<>();
 
 
     @Override
@@ -33,6 +38,10 @@ public class DaoAnnotationProcessor extends AbstractProcessor {
         super.init(processingEnv);
 
         supportClassList.add(Dao.class);
+
+        curdList.add(Query.class);
+        curdList.add(Delete.class);
+        curdList.add(Insert.class);
     }
 
     @Override
@@ -53,22 +62,18 @@ public class DaoAnnotationProcessor extends AbstractProcessor {
             String pkgName = elementAnnotatedDatabase.getEnclosingElement().toString();
             String clsName = elementAnnotatedDatabase.getSimpleName().toString();
 
-            TypeSpec.Builder defaultClassBuilder = TypeSpec.classBuilder(
-                    clsName + AnnotationProcessorHelper.DB_IMPL_SUFFIX);
-            defaultClassBuilder.addModifiers(Modifier.PUBLIC);
-            defaultClassBuilder.addSuperinterface(ClassName.get(pkgName, clsName));
-
-            ((TypeElement) elementAnnotatedDatabase).getEnclosedElements().forEach(elementInDatabase -> {
-                switch (elementInDatabase.getKind()) {
-                    case METHOD:
-                        MethodSpec.Builder methodBuilder = AnnotationProcessorHelper.formMethodBuilder((ExecutableElement) elementInDatabase);
-                        defaultClassBuilder.addMethod(methodBuilder.build());
-                        break;
-                    default:
-                        break;
+            TypeSpec.Builder containerClassBuilder = createContainerClassBuilder(pkgName, clsName);
+            Map<ExecutableElement, Class<? extends Annotation>> curdElementMap = parseElement(elementAnnotatedDatabase);
+            curdElementMap.forEach((element, aClass) -> {
+                out.println(element.getSimpleName() + ":" + aClass.getName());
+                MethodSpec.Builder methodBuilder = AnnotationProcessorHelper.formMethodBuilder(element, true);
+                if (element.getReturnType().getKind() == TypeKind.DECLARED) {
+                    methodBuilder.addStatement("return null");
                 }
+                containerClassBuilder.addMethod(methodBuilder.build());
             });
-            JavaFile.Builder fileBuilder = JavaFile.builder(pkgName, defaultClassBuilder.build());
+
+            JavaFile.Builder fileBuilder = JavaFile.builder(pkgName, containerClassBuilder.build());
             JavaFile javaFile = fileBuilder.build();
             try {
                 javaFile.writeTo(out);
@@ -77,10 +82,36 @@ public class DaoAnnotationProcessor extends AbstractProcessor {
                 e.printStackTrace();
             }
         });
-
-
-
-
         return false;
+    }
+
+    public static Map<ExecutableElement, Class<? extends Annotation>> parseElement(Element elementAnnotatedDao) {
+        Map<ExecutableElement, Class<? extends Annotation>> curdElementMap = new HashMap<>();
+        ElementFilter.methodsIn(elementAnnotatedDao.getEnclosedElements()).forEach(executableElement -> {
+            Class<? extends Annotation> cls = isAnnotatedCurd(executableElement);
+            if (cls != null) {
+                curdElementMap.put(executableElement, cls);
+            }
+        });
+        return curdElementMap;
+    }
+
+    private static Class<? extends Annotation> isAnnotatedCurd(ExecutableElement element){
+        for (Class<? extends Annotation> aClass : curdList) {
+            if (element.getAnnotation(aClass) != null) {
+                return aClass;
+            }
+        }
+        return null;
+    }
+
+
+    @Override
+    public TypeSpec.Builder createContainerClassBuilder(String pkgName, String clsName) {
+        TypeSpec.Builder classBuilder = TypeSpec.classBuilder(
+                clsName + AnnotationProcessorHelper.DB_IMPL_SUFFIX);
+        classBuilder.addModifiers(Modifier.PUBLIC);
+        classBuilder.addSuperinterface(ClassName.get(pkgName, clsName));
+        return classBuilder;
     }
 }

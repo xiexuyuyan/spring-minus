@@ -8,6 +8,8 @@ public class Application {
         System.out.println("hello world");
         // MiniApplication.run(Application.class, args);
         UserDatabase database = Room.Companion.databaseBuilder(UserDatabase.class, "database name").build();
-        database.userDao();
+        if (database.userDao().getAll() == null) {
+            System.out.println("null but success");
+        }
     }
 }

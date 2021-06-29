@@ -1,7 +1,7 @@
 package org.yuyan.room.annotation.processor.database;
 
 import com.squareup.javapoet.*;
-import org.yuyan.room.annotation.processor.temp.AnnotationProcessorHelper;
+import org.yuyan.room.annotation.processor.helper.AnnotationProcessorHelper;
 import org.yuyan.room.database.Database;
 
 import javax.annotation.processing.*;
@@ -81,7 +81,7 @@ public class DatabaseAnnotationProcessor extends AbstractProcessor implements Da
         List<ExecutableElement> executableElementList = ElementFilter
                 .methodsIn(elementAnnotatedDatabase.getEnclosedElements());
         executableElementList.forEach(daoMethodElement -> {
-            MethodSpec.Builder daoMethodBuilder = AnnotationProcessorHelper.formMethodBuilder(daoMethodElement);
+            MethodSpec.Builder daoMethodBuilder = AnnotationProcessorHelper.formMethodBuilder(daoMethodElement, true);
             TypeName daoType = TypeName.get(daoMethodElement.getReturnType());
             String singletonName = daoMethodElement.getSimpleName() + AnnotationProcessorHelper.FIELD_INSTANCE_SUFFIX;
             FieldSpec daoInstanceField = FieldSpec.builder(daoType, singletonName).build();
