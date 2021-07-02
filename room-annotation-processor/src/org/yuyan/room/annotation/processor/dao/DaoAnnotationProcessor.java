@@ -2,6 +2,7 @@ package org.yuyan.room.annotation.processor.dao;
 
 import com.squareup.javapoet.*;
 import org.yuyan.room.annotation.processor.helper.AnnotationProcessorHelper;
+import org.yuyan.room.base.DatabaseConfigure;
 import org.yuyan.room.dao.Dao;
 import org.yuyan.room.dao.Delete;
 import org.yuyan.room.dao.Insert;
@@ -63,11 +64,12 @@ public class DaoAnnotationProcessor extends AbstractProcessor implements DaoProc
 
             TypeSpec.Builder containerClassBuilder = createContainerClassBuilder(pkgName, clsName);
 
-            containerClassBuilder.addField(Connection.class, "connection");
+            containerClassBuilder.addField(DatabaseConfigure.class, "configure");
+
             MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder()
                     .addModifiers(Modifier.PUBLIC)
-                    .addParameter(ParameterSpec.builder(Connection.class, "connection").build());
-            constructorBuilder.addStatement("this.connection = connection");
+                    .addParameter(ParameterSpec.builder(DatabaseConfigure.class, "configure").build());
+            constructorBuilder.addStatement("this.configure = configure");
             containerClassBuilder.addMethod(constructorBuilder.build());
 
             Map<ExecutableElement, Class<? extends Annotation>> curdElementMap = parseElement(elementAnnotatedDatabase);

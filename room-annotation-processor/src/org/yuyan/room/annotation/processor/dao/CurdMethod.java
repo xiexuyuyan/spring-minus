@@ -14,6 +14,7 @@ import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.VariableElement;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -109,6 +110,7 @@ public class CurdMethod {
 
         List<ColumnType> columns = entityType.getColumns();
         methodBuilder.addCode("try{\n");
+        methodBuilder.addCode("    $T connection = configure.createConnection();\n", Connection.class);
         methodBuilder.addCode("    $T statement = connection.createStatement();\n", Statement.class);
         methodBuilder.addCode("    String sql = \"insert into \" + \n");
         methodBuilder.addCode("        \"`$N`(", entityType.getTableName());

@@ -10,6 +10,4 @@ import java.sql.Connection
 abstract class UserDatabase: RoomDatabase(){
     @DaoMethod
     abstract fun userDao(): UserDao
-
-    lateinit var connection: Connection
 }

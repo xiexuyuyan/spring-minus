@@ -96,7 +96,7 @@ public class DatabaseAnnotationProcessor extends AbstractProcessor implements Da
             daoMethodBuilder.addCode("} else {\n");
             daoMethodBuilder.addCode("    synchronized(this) {\n");
             daoMethodBuilder.addCode("        if ($N == null) {\n", singletonName);
-            daoMethodBuilder.addCode("            $N = new $T$L(connection);\n", singletonName, daoType, AnnotationProcessorHelper.DB_IMPL_SUFFIX);
+            daoMethodBuilder.addCode("            $N = new $T$L(configure);\n", singletonName, daoType, AnnotationProcessorHelper.DB_IMPL_SUFFIX);
             daoMethodBuilder.addCode("        }\n");
             daoMethodBuilder.addCode("        return $N;\n", singletonName);
             daoMethodBuilder.addCode("    }\n");
