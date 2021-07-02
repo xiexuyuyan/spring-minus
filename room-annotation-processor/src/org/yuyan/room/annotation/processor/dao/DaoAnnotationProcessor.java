@@ -1,9 +1,6 @@
 package org.yuyan.room.annotation.processor.dao;
 
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.*;
 import org.yuyan.room.annotation.processor.helper.AnnotationProcessorHelper;
 import org.yuyan.room.dao.Dao;
 import org.yuyan.room.dao.Delete;
@@ -23,9 +20,11 @@ import javax.lang.model.type.TypeKind;
 import javax.lang.model.util.ElementFilter;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
-
-import static java.lang.System.out;
 
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class DaoAnnotationProcessor extends AbstractProcessor implements DaoProcessable {
@@ -63,10 +62,19 @@ public class DaoAnnotationProcessor extends AbstractProcessor implements DaoProc
             String clsName = elementAnnotatedDatabase.getSimpleName().toString();
 
             TypeSpec.Builder containerClassBuilder = createContainerClassBuilder(pkgName, clsName);
+
+            containerClassBuilder.addField(Connection.class, "connection");
+            MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder()
+                    .addModifiers(Modifier.PUBLIC)
+                    .addParameter(ParameterSpec.builder(Connection.class, "connection").build());
+            constructorBuilder.addStatement("this.connection = connection");
+            containerClassBuilder.addMethod(constructorBuilder.build());
+
             Map<ExecutableElement, Class<? extends Annotation>> curdElementMap = parseElement(elementAnnotatedDatabase);
             curdElementMap.forEach((element, aClass) -> {
-                out.println(element.getSimpleName() + ":" + aClass.getName());
-                MethodSpec.Builder methodBuilder = AnnotationProcessorHelper.formMethodBuilder(element, true);
+                System.out.println("dao handle: " + element.getSimpleName() + "=" + aClass.getName());
+                MethodSpec.Builder methodBuilder = CurdMethod.baseBuilder(element);
+                CurdMethod.setBasicInsertion(methodBuilder, element);
                 if (element.getReturnType().getKind() == TypeKind.DECLARED) {
                     methodBuilder.addStatement("return null");
                 }
@@ -76,7 +84,7 @@ public class DaoAnnotationProcessor extends AbstractProcessor implements DaoProc
             JavaFile.Builder fileBuilder = JavaFile.builder(pkgName, containerClassBuilder.build());
             JavaFile javaFile = fileBuilder.build();
             try {
-                javaFile.writeTo(out);
+                javaFile.writeTo(System.out);
                 javaFile.writeTo(processingEnv.getFiler());
             } catch (IOException e) {
                 e.printStackTrace();

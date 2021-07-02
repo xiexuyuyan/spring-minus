@@ -2,6 +2,8 @@ package org.yuyan.room.annotation.processor.database;
 
 import com.squareup.javapoet.*;
 import org.yuyan.room.annotation.processor.helper.AnnotationProcessorHelper;
+import org.yuyan.room.dao.Dao;
+import org.yuyan.room.database.DaoMethod;
 import org.yuyan.room.database.Database;
 
 import javax.annotation.processing.*;
@@ -80,23 +82,27 @@ public class DatabaseAnnotationProcessor extends AbstractProcessor implements Da
         Map<FieldSpec, MethodSpec> daoMethodWithSingletonField = new HashMap<>();
         List<ExecutableElement> executableElementList = ElementFilter
                 .methodsIn(elementAnnotatedDatabase.getEnclosedElements());
-        executableElementList.forEach(daoMethodElement -> {
-            MethodSpec.Builder daoMethodBuilder = AnnotationProcessorHelper.formMethodBuilder(daoMethodElement, true);
-            TypeName daoType = TypeName.get(daoMethodElement.getReturnType());
-            String singletonName = daoMethodElement.getSimpleName() + AnnotationProcessorHelper.FIELD_INSTANCE_SUFFIX;
+        for (ExecutableElement methodElement : executableElementList) {
+            DaoMethod daoMethod = methodElement.getAnnotation(DaoMethod.class);
+            if (daoMethod == null) {
+                continue;
+            }
+            MethodSpec.Builder daoMethodBuilder = AnnotationProcessorHelper.formMethodBuilder(methodElement, true);
+            TypeName daoType = TypeName.get(methodElement.getReturnType());
+            String singletonName = methodElement.getSimpleName() + AnnotationProcessorHelper.FIELD_INSTANCE_SUFFIX;
             FieldSpec daoInstanceField = FieldSpec.builder(daoType, singletonName).build();
             daoMethodBuilder.addCode("if ($N != null) {\n", singletonName);
             daoMethodBuilder.addCode("    return $N;\n", singletonName);
             daoMethodBuilder.addCode("} else {\n");
             daoMethodBuilder.addCode("    synchronized(this) {\n");
             daoMethodBuilder.addCode("        if ($N == null) {\n", singletonName);
-            daoMethodBuilder.addCode("            $N = new $T$L();\n", singletonName, daoType, AnnotationProcessorHelper.DB_IMPL_SUFFIX);
+            daoMethodBuilder.addCode("            $N = new $T$L(connection);\n", singletonName, daoType, AnnotationProcessorHelper.DB_IMPL_SUFFIX);
             daoMethodBuilder.addCode("        }\n");
             daoMethodBuilder.addCode("        return $N;\n", singletonName);
             daoMethodBuilder.addCode("    }\n");
             daoMethodBuilder.addCode("}\n");
             daoMethodWithSingletonField.put(daoInstanceField, daoMethodBuilder.build());
-        });
+        }
         return daoMethodWithSingletonField;
     }
 }

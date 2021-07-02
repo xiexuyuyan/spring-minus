@@ -1,19 +1,12 @@
 package com.yuyan.room
 
-import org.yuyan.room.dao.Dao
-import org.yuyan.room.dao.Delete
-import org.yuyan.room.dao.Insert
-import org.yuyan.room.dao.Query
+import org.yuyan.room.dao.*
 
 
 @Dao
 interface UserDao {
-    @Query("sentence")
-    fun getAll(): List<User>
 
-    @Insert
-    fun insert(vararg users: User)
+    @Insert(entity = User::class)
+    fun insert(user: User)
 
-    @Delete
-    fun delete(user: User)
 }
