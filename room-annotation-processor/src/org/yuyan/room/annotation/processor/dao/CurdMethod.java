@@ -124,6 +124,63 @@ public class CurdMethod {
         }.build();
     }
 
+    private static void setBasicUpdateMethod(MethodSpec.Builder methodBuilder
+            , ExecutableElement element) {
+        String entityCanonicalName = getEntityCanonicalName(element);
+        EntityType entityType = EntityHolder.entities.get(entityCanonicalName);
+        if (entityType == null || entityCanonicalName == null) {
+            return;
+        }
+
+        // --- info from param
+        String paramName = null;
+        for (VariableElement parameter : element.getParameters()) {
+            TypeName clsType = TypeName.get(parameter.asType());
+            if (clsType.toString().equals(entityCanonicalName)) {
+                paramName = parameter.getSimpleName().toString();
+                break;
+            }
+        }
+        if (paramName == null) {
+            return;
+        }
+
+        List<ColumnType> columns = entityType.getColumns();
+
+        String finalParamName = paramName;
+        new Batch(methodBuilder){
+            @Override
+            void action() {
+                methodBuilder.addCode("    String sql = \"update $N \"\n", entityType.getTableName());
+                String primaryVarName = "";
+                String dot = "set";
+                for (ColumnType columnType : columns) {
+                    String columnName = columnType.getColumnName();
+                    if (columnName.equals(entityType.getPrimaryKey())) {
+                        primaryVarName = columnType.getVarName();
+                        continue;
+                    }
+                    String varGetMethod = StringUtils.upperCase(columnType.getVarName());
+                    methodBuilder.addCode("               + \"$N $N = '\" + $N.get$N() + \"' \"\n", dot,columnName, finalParamName, varGetMethod);
+                    dot = ",";
+                }
+                String primaryKeyGetMethod = StringUtils.upperCase(primaryVarName);
+                methodBuilder.addCode("               + \"where $N = \" + $N.get$N();\n", entityType.getPrimaryKey(), finalParamName, primaryKeyGetMethod);
+                methodBuilder.addCode("    System.out.println(sql);\n");
+                methodBuilder.addCode("    int rowCount = statement.executeUpdate(\n");
+                methodBuilder.addCode("        sql, $T.RETURN_GENERATED_KEYS);\n", Statement.class);
+                methodBuilder.addCode("    System.out.println(\"affected line size = \" + rowCount);");
+                methodBuilder.addCode("    $T resultSet = statement.getGeneratedKeys();\n", ResultSet.class);
+                methodBuilder.addCode("    resultSet.close();\n");
+            }
+        }.build();
+
+        /**
+         * String sql = update users set user_name = '', user_mail = '' where uid = ''
+         * */
+
+    }
+
     /**
      * the universal way to do a query
      * @Query (val entity: KClass<*> = Any::class, val statement: String)
@@ -189,7 +246,7 @@ public class CurdMethod {
         } else if (aClass.equals(Delete.class)) {
 
         } else if (aClass.equals(Update.class)) {
-
+            setBasicUpdateMethod(methodBuilder, element);
         } else if (aClass.equals(Query.class)) {
             setBasicQueryMethod(methodBuilder, element);
         }

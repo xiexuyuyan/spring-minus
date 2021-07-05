@@ -4,7 +4,7 @@ import org.yuyan.room.entity.ColumnInfo;
 import org.yuyan.room.entity.Entity;
 import org.yuyan.room.entity.PrimaryKey;
 
-@Entity
+@Entity(tableName = "experience")
 public class Experience {
     @PrimaryKey
     @ColumnInfo(name = "uid")

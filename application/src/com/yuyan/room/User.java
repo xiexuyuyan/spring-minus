@@ -4,7 +4,7 @@ import org.yuyan.room.entity.ColumnInfo;
 import org.yuyan.room.entity.Entity;
 import org.yuyan.room.entity.PrimaryKey;
 
-@Entity
+@Entity(tableName = "users")
 public class User {
     @PrimaryKey
     @ColumnInfo(name = "uid")
@@ -15,6 +15,15 @@ public class User {
 
     @ColumnInfo(name = "user_mail")
     public String mail;
+
+    public User() {
+    }
+
+    public User(int uid, String name, String mail) {
+        this.uid = uid;
+        this.name = name;
+        this.mail = mail;
+    }
 
     public int getUid() {
         return uid;

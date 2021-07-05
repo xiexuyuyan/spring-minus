@@ -10,5 +10,7 @@ public class Application {
     public static void main(String[] args) {
         System.out.println("hello world");
         MiniApplication.run(Application.class, args);
+        UserDatabase database = Room.Companion.databaseBuilder(UserDatabase.class, "test").build();
+        database.userDao().update(new User(1, "mName", "mMail"));
     }
 }

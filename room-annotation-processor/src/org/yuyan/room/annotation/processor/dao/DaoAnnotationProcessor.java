@@ -3,10 +3,7 @@ package org.yuyan.room.annotation.processor.dao;
 import com.squareup.javapoet.*;
 import org.yuyan.room.annotation.processor.helper.AnnotationProcessorHelper;
 import org.yuyan.room.base.DatabaseConfigure;
-import org.yuyan.room.dao.Dao;
-import org.yuyan.room.dao.Delete;
-import org.yuyan.room.dao.Insert;
-import org.yuyan.room.dao.Query;
+import org.yuyan.room.dao.*;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -42,6 +39,7 @@ public class DaoAnnotationProcessor extends AbstractProcessor implements DaoProc
         curdList.add(Query.class);
         curdList.add(Delete.class);
         curdList.add(Insert.class);
+        curdList.add(Update.class);
     }
 
     @Override

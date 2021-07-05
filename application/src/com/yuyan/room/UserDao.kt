@@ -15,4 +15,7 @@ interface UserDao {
 
     @Query(statement = "select * from experience where uid like :uid limit 1")
     fun getExperienceByUid(uid: Int): Experience
+
+    @Update(entity = User::class)
+    fun update(user: User)
 }
