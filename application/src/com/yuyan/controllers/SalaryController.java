@@ -11,12 +11,12 @@ public class SalaryController {
     @AutoWired
     private SalaryService salaryService;
 
-    @RequestMapping("get_salary.jsp")
-    public Integer getSalary(@RequestParam("name") String name
-            , @RequestParam("experience") String experience){
-        if (experience == null) {
-            experience = "0";
+    @RequestMapping("get_salary.json")
+    public Integer getSalary(@RequestParam("uid") String uid){
+        System.out.println("controller: uid = "+uid);
+        if (uid == null) {
+            uid = "1";
         }
-        return salaryService.calcSalary(Integer.parseInt(experience));
+        return salaryService.calcSalary(Integer.parseInt(uid));
     }
 }

@@ -65,7 +65,6 @@ public class DaoAnnotationProcessor extends AbstractProcessor implements DaoProc
             TypeSpec.Builder containerClassBuilder = createContainerClassBuilder(pkgName, clsName);
 
             containerClassBuilder.addField(DatabaseConfigure.class, "configure");
-
             MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder()
                     .addModifiers(Modifier.PUBLIC)
                     .addParameter(ParameterSpec.builder(DatabaseConfigure.class, "configure").build());
@@ -76,10 +75,11 @@ public class DaoAnnotationProcessor extends AbstractProcessor implements DaoProc
             curdElementMap.forEach((element, aClass) -> {
                 System.out.println("dao handle: " + element.getSimpleName() + "=" + aClass.getName());
                 MethodSpec.Builder methodBuilder = CurdMethod.baseBuilder(element);
-                CurdMethod.setBasicInsertion(methodBuilder, element);
-                if (element.getReturnType().getKind() == TypeKind.DECLARED) {
-                    methodBuilder.addStatement("return null");
+
+                if (CurdMethod.isCurdMethod(aClass.getCanonicalName())) {
+                    CurdMethod.setBasicCurdMethod(methodBuilder, element, aClass);
                 }
+
                 containerClassBuilder.addMethod(methodBuilder.build());
             });
 

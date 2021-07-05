@@ -12,6 +12,7 @@ import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
 import java.util.*;
 
@@ -46,9 +47,12 @@ public class EntityAnnotationProcessor extends AbstractProcessor implements Enti
             entityType.tableName = elementAnnotatedEntity.getAnnotation(Entity.class).tableName();
             System.out.println("table name: " + entityType.tableName);
             ColumnType columnType = null;
+            ElementFilter.methodsIn(elementAnnotatedEntity.getEnclosedElements()).forEach(element -> {
+                System.out.println("++++++++++++"+element.getSimpleName());
+            });
             for (VariableElement variableElement : ElementFilter.fieldsIn(elementAnnotatedEntity.getEnclosedElements())) {
                 String varName = variableElement.getSimpleName().toString();
-                String varClassName= variableElement.asType().toString();
+                TypeMirror varType= variableElement.asType();
                 String columnName = null;
 
                 ColumnInfo columnInfo = variableElement.getAnnotation(ColumnInfo.class);
@@ -61,7 +65,7 @@ public class EntityAnnotationProcessor extends AbstractProcessor implements Enti
                     entityType.primaryKey = columnName;
                 }
 
-                columnType = new ColumnType(columnName, varName, varClassName);
+                columnType = new ColumnType(columnName, varName, varType);
                 entityType.columns.add(columnType);
             }
             EntityHolder.entities.put(entityCanonicalName, entityType);
