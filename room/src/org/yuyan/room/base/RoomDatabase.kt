@@ -31,9 +31,9 @@ abstract class RoomDatabase {
                     , databaseName = databaseName
                     , url = url
                     , port = port
-                    , suffixes = *arrayOf("rewriteBatchedStatements=true")
+                    , suffixes = arrayOf("rewriteBatchedStatements=true")
             )
-            val database: T = Room.getGeneratedImplementation(klass, DB_IMPL_SUFFIX)
+            val database: T = getGeneratedImplementation(klass, DB_IMPL_SUFFIX)
             database.initialize(configuration)
             return database
         }

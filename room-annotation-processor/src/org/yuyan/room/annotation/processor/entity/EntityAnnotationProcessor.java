@@ -47,9 +47,6 @@ public class EntityAnnotationProcessor extends AbstractProcessor implements Enti
             entityType.tableName = elementAnnotatedEntity.getAnnotation(Entity.class).tableName();
             System.out.println("table name: " + entityType.tableName);
             ColumnType columnType = null;
-            ElementFilter.methodsIn(elementAnnotatedEntity.getEnclosedElements()).forEach(element -> {
-                System.out.println("++++++++++++"+element.getSimpleName());
-            });
             for (VariableElement variableElement : ElementFilter.fieldsIn(elementAnnotatedEntity.getEnclosedElements())) {
                 String varName = variableElement.getSimpleName().toString();
                 TypeMirror varType= variableElement.asType();

@@ -118,6 +118,7 @@ public class CurdMethod {
                 methodBuilder.addCode("    System.out.println(sql);\n");
                 methodBuilder.addCode("    int rowCount = statement.executeUpdate(\n");
                 methodBuilder.addCode("        sql, $T.RETURN_GENERATED_KEYS);\n", Statement.class);
+                methodBuilder.addCode("    System.out.println(\"affected line size = \" + rowCount);\n");
                 methodBuilder.addCode("    $T resultSet = statement.getGeneratedKeys();\n", ResultSet.class);
                 methodBuilder.addCode("    resultSet.close();\n");
             }
@@ -169,7 +170,7 @@ public class CurdMethod {
                 methodBuilder.addCode("    System.out.println(sql);\n");
                 methodBuilder.addCode("    int rowCount = statement.executeUpdate(\n");
                 methodBuilder.addCode("        sql, $T.RETURN_GENERATED_KEYS);\n", Statement.class);
-                methodBuilder.addCode("    System.out.println(\"affected line size = \" + rowCount);");
+                methodBuilder.addCode("    System.out.println(\"affected line size = \" + rowCount);\n");
                 methodBuilder.addCode("    $T resultSet = statement.getGeneratedKeys();\n", ResultSet.class);
                 methodBuilder.addCode("    resultSet.close();\n");
             }
@@ -211,7 +212,6 @@ public class CurdMethod {
                 List<ColumnType> columnTypeList = retType.getColumns();
                 columnTypeList.forEach(columnType -> {
                     String getter = ClassUtils.classGetter(columnType.getVarType().toString());
-                    System.out.println(getter);
                     methodBuilder.addCode("        $T _$N = rs.$L(\"$L\");\n"
                             , TypeName.get(columnType.getVarType())
                             , columnType.getVarName()
@@ -222,6 +222,7 @@ public class CurdMethod {
                     methodBuilder.addCode("        ret.$L($L);\n", setter, "_" + columnType.getVarName());
                 });
                 methodBuilder.addCode("    }\n");
+                methodBuilder.addCode("    rs.close();\n");
                 /**
                  * String sql = $statement;
                  * for element.variable
@@ -333,37 +334,4 @@ public class CurdMethod {
             methodBuilder.addCode("}\n");
         }
     }
-    /*@Override
-    public void insert(User user) {
-        Connection connection = null;
-        Statement statement = null;
-        try{
-            connection = configure.createConnection();
-            statement = connection.createStatement();
-            String sql = "insert into " +
-                    "`users`(`uid`, `user_name`, `user_mail`) " +
-                    "values(" +
-                    "'" + user.getUid() + "', " +
-                    "'" + user.getName() + "', " +
-                    "'" + user.getMail() + "')";
-            System.out.println(sql);
-            int rowCount = statement.executeUpdate(
-                    sql, Statement.RETURN_GENERATED_KEYS);
-            ResultSet rs = statement.getGeneratedKeys();
-            rs.close();
-            statement.close();
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try{
-                if (statement != null)
-                    statement.close();
-                if (connection != null)
-                    connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
 }
