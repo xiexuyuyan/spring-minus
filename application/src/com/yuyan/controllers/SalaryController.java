@@ -12,11 +12,12 @@ public class SalaryController {
     private SalaryService salaryService;
 
     @RequestMapping("get_salary.json")
-    public Integer getSalary(@RequestParam("uid") String uid){
+    public Integer getSalary(@RequestParam("uid") String uid, @RequestParam("code") String code){
         System.out.println("controller: uid = "+uid);
         if (uid == null) {
             uid = "1";
         }
+        System.out.println("code = " + code);
         return salaryService.calcSalary(Integer.parseInt(uid));
     }
 }
