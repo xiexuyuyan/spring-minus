@@ -11,7 +11,7 @@ public class SalaryController {
     @AutoWired
     private SalaryService salaryService;
 
-    @RequestMapping("get_salary.json")
+    @RequestMapping("/get_salary.json")
     public Integer getSalary(@RequestParam("uid") String uid, @RequestParam("code") String code){
         System.out.println("controller: uid = "+uid);
         if (uid == null) {

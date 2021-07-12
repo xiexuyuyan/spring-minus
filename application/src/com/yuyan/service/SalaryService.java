@@ -13,7 +13,6 @@ import org.yuyan.springmvc.beans.Bean;
 public class SalaryService {
     public Integer calcSalary(Integer uid) {
         UserDatabase database = UserDatabaseHelper.get();
-        System.out.println(database.hashCode());
         User u = database.userDao().getUserNameByUid(uid);
         System.out.println(u.toString());
         Experience exp = database.userDao().getExperienceByUid(uid);

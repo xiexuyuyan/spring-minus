@@ -24,7 +24,7 @@ public class MappingHandler {
 
     public boolean handle(ServletRequest req, ServletResponse res) throws IllegalAccessException, InstantiationException, InvocationTargetException, IOException {
         String requestUri = ((HttpServletRequest)req).getRequestURI();
-        if (uri == null || uri.equals(requestUri)) {
+        if (uri == null || !uri.equals(requestUri)) {
             return false;
         }
 
