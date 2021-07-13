@@ -2,10 +2,13 @@ package org.yuyan.springmvc.web.handler;
 
 import org.yuyan.springmvc.beans.BeanFactory;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
+import org.yuyan.springmvc.beans.TypeServletRequest;
+import org.yuyan.springmvc.beans.TypeServletResponse;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -34,8 +37,22 @@ public class MappingHandler {
         }
 
         Object ctl = BeanFactory.getBean(controller);
+        checkServletAttributes(ctl, req, res);
         Object response = method.invoke(ctl, params);
         res.getWriter().println(response.toString());
         return true;
+    }
+
+    private void checkServletAttributes(Object object, ServletRequest req, ServletResponse res) throws IllegalAccessException {
+        for (Field field : object.getClass().getDeclaredFields()) {
+            if (field.isAnnotationPresent(TypeServletRequest.class)) {
+                field.setAccessible(true);
+                field.set(object, req);
+            }
+            if (field.isAnnotationPresent(TypeServletResponse.class)) {
+                field.setAccessible(true);
+                field.set(object, res);
+            }
+        }
     }
 }

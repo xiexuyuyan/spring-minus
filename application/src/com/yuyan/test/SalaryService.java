@@ -1,4 +1,4 @@
-package com.yuyan.service;
+package com.yuyan.test;
 
 import com.yuyan.room.Experience;
 import com.yuyan.room.User;
@@ -13,8 +13,6 @@ import org.yuyan.springmvc.beans.Bean;
 public class SalaryService {
     public Integer calcSalary(Integer uid) {
         UserDatabase database = UserDatabaseHelper.get();
-        User u = database.userDao().getUserNameByUid(uid);
-        System.out.println(u.toString());
         Experience exp = database.userDao().getExperienceByUid(uid);
         System.out.println(exp.toString());
         return Integer.parseInt(exp.getExperience()) * 500;
