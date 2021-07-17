@@ -10,4 +10,8 @@ import java.sql.Connection
 abstract class UserDatabase: RoomDatabase(){
     @DaoMethod
     abstract fun userDao(): UserDao
+    @DaoMethod
+    abstract fun sessionDao(): SessionDao
+    @DaoMethod
+    abstract fun wxUserDao(): WxUserDao
 }

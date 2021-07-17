@@ -8,13 +8,13 @@ import org.yuyan.room.entity.PrimaryKey;
 public class User {
     @PrimaryKey
     @ColumnInfo(name = "uid")
-    public int uid;
+    int uid;
 
     @ColumnInfo(name = "user_name")
-    public String name;
+    String name;
 
     @ColumnInfo(name = "user_mail")
-    public String mail;
+    String mail;
 
     public User() {
     }
