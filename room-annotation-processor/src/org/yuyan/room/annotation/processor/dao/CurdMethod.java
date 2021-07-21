@@ -201,7 +201,7 @@ public class CurdMethod {
                 methodBuilder.addCode("    String sql = $S;\n", statement);
                 element.getParameters().forEach(variableElement -> {
                     String paramName = variableElement.getSimpleName().toString();
-                    methodBuilder.addCode("    sql = sql.replace(\":" + paramName +"\", $N+\"\");\n", paramName);
+                    methodBuilder.addCode("    sql = sql.replace(\":" + paramName +"\", \"'\"+$N+\"'\");\n", paramName);
                 });
                 methodBuilder.addCode("    System.out.println(sql);\n");
                 methodBuilder.addCode("    ResultSet rs = statement.executeQuery(sql);\n");

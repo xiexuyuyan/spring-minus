@@ -1,4 +1,4 @@
-package com.yuyan.wx.login.data;
+package com.yuyan.web.user.data;
 
 public class Result<T> {
     private Result() {}

@@ -1,4 +1,4 @@
-package com.yuyan.wx.share;
+package com.yuyan.wx.user.share;
 
 import org.yuyan.springmvc.beans.TypeServletRequest;
 import org.yuyan.springmvc.beans.TypeServletResponse;

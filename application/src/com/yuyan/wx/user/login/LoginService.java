@@ -1,14 +1,13 @@
-package com.yuyan.wx.login;
+package com.yuyan.wx.user.login;
 
 import com.google.gson.Gson;
-import com.yuyan.wx.login.data.Result;
-import com.yuyan.wx.login.data.SessionKey;
+import com.yuyan.wx.user.login.data.Result;
+import com.yuyan.wx.user.login.data.SessionKey;
 import okhttp3.*;
 import org.yuyan.springmvc.beans.Bean;
 
 import java.io.IOException;
 import java.util.Objects;
-import java.util.Properties;
 
 @Bean
 @SuppressWarnings("unchecked")

@@ -1,9 +1,9 @@
-package com.yuyan.wx.login;
+package com.yuyan.wx.user.login;
 
 import com.google.gson.JsonObject;
 import com.yuyan.room.*;
-import com.yuyan.wx.login.data.Result;
-import com.yuyan.wx.login.data.SessionKey;
+import com.yuyan.wx.user.login.data.Result;
+import com.yuyan.wx.user.login.data.SessionKey;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.yuyan.springmvc.beans.AutoWired;
 import org.yuyan.springmvc.beans.TypeServletRequest;
@@ -49,7 +49,7 @@ public class LoginController {
         SessionKey sessionKey = ((Result.Success<SessionKey>) syncResult).getData();
 
         WxUser wxUser = database.wxUserDao().getWxUserByOpenid(sessionKey.getOpenid());
-        Session session;
+        WxSession wxSession;
         if (wxUser.getUid() == 0) {
             User lastUser = database.userDao().getLastUser();
             User newUser = new User();
@@ -60,33 +60,33 @@ public class LoginController {
             wxUser.setOpenid(sessionKey.getOpenid());
             database.wxUserDao().insert(wxUser);
 
-            session = new Session();
-            session.setUid(wxUser.getUid());
-            session.setSessionKey(sessionKey.getKey());
+            wxSession = new WxSession();
+            wxSession.setUid(wxUser.getUid());
+            wxSession.setSessionKey(sessionKey.getKey());
             while (true) {
                 int randomSessionUser = (int) (Math.random() * 10000) + 1;
-                Session seed = database.sessionDao().getSessionBySessionUser(randomSessionUser);
+                WxSession seed = database.wxSessionDao().getSessionBySessionUser(randomSessionUser);
                 if (seed.getUid() == 0) {
-                    session.setSessionUser(randomSessionUser + "");
+                    wxSession.setSessionUser(randomSessionUser + "");
                     break;
                 }
             }
-            database.sessionDao().insert(session);
+            database.wxSessionDao().insert(wxSession);
         } else {
-            session = database.sessionDao().getSessionByUid(wxUser.getUid());
-            session.setSessionKey(sessionKey.getKey());
-            database.sessionDao().update(session);
+            wxSession = database.wxSessionDao().getSessionByUid(wxUser.getUid());
+            wxSession.setSessionKey(sessionKey.getKey());
+            database.wxSessionDao().update(wxSession);
         }
 
         Login login = Login.createCurrent(wxUser.getUid());
-        database.sessionDao().login(login);
+        database.wxSessionDao().login(login);
 
         reDataJsonObject.addProperty("code", "10000");
         reDataJsonObject.addProperty("msg", "success");
 
         System.out.println("reDataJsonObject.toString() = " + reDataJsonObject.toString());
 
-        ((HttpServletResponse)response).setHeader("session_key", session.getSessionUser());
+        ((HttpServletResponse)response).setHeader("session_key", wxSession.getSessionUser());
 
         return reDataJsonObject.toString();
     }

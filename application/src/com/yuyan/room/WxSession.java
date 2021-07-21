@@ -4,8 +4,8 @@ import org.yuyan.room.entity.ColumnInfo;
 import org.yuyan.room.entity.Entity;
 import org.yuyan.room.entity.PrimaryKey;
 
-@Entity(tableName = "session")
-public class Session {
+@Entity(tableName = "wx_session")
+public class WxSession {
     @PrimaryKey
     @ColumnInfo(name = "uid")
     int uid;
@@ -16,10 +16,10 @@ public class Session {
     @ColumnInfo(name = "session_user")
     String sessionUser;
 
-    public Session() {
+    public WxSession() {
     }
 
-    public Session(int uid, String sessionKey, String sessionUser) {
+    public WxSession(int uid, String sessionKey, String sessionUser) {
         this.uid = uid;
         this.sessionKey = sessionKey;
         this.sessionUser = sessionUser;

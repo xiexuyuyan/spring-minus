@@ -12,7 +12,7 @@ interface WxUserDao {
     @Query(statement = "select * from wxuser where uid like :uid limit 1")
     fun getWxUserByUid(uid: Int): WxUser
 
-    @Query(statement = "select * from wxuser where openid like ':openid' limit 1")
+    @Query(statement = "select * from wxuser where openid like :openid limit 1")
     fun getWxUserByOpenid(openid: String): WxUser
 
     @Update(entity = WxUser::class)
