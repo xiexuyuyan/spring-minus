@@ -44,7 +44,9 @@ public class LoginController {
         } else if (name != null && mail != null) {
             result = loginService.loginByNameAndMail(name, mail);
         } else {
-            return ResultInWeb.error().jsonString();
+            return ResultInWeb.create(10002)
+                    .with("details", "params posted into [/web/login.jsp] all get tobe null")
+                    .jsonString();
         }
 
         if (result instanceof Result.Error) {

@@ -2,6 +2,7 @@ package com.yuyan.data;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.yuyan.springmvc.web.state.ResultState;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,15 +39,19 @@ public class ResultInWeb {
         data.put("msg", this.msg);
     }
 
+    public static ResultInWeb create(int code){
+        return new ResultInWeb(code + "", ResultState.get(code + ""));
+    }
+
     public static ResultInWeb success(){
-        return new ResultInWeb("10000", "success");
+        return create(10000);
     }
     public static ResultInWeb success(String code, String msg){
         return new ResultInWeb(code, msg);
     }
 
     public static ResultInWeb error(){
-        return new ResultInWeb("10001", "error");
+        return create(10001);
     }
     public static ResultInWeb error(String code, String msg){
         return new ResultInWeb(code, msg);
@@ -59,6 +64,11 @@ public class ResultInWeb {
 
     public <V> void put(String key, V value) {
         data.put(key, value);
+    }
+
+    public <V> ResultInWeb with(String key, V value) {
+        put(key, value);
+        return this;
     }
 
 }
