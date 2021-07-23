@@ -3,3 +3,5 @@
 /tomcat.6699/
 /build/
 /*/build/
+/*/.htaccess
+/*/nginx.htaccess
