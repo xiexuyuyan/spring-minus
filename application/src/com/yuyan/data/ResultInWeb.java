@@ -1,4 +1,4 @@
-package com.yuyan.web.user.data;
+package com.yuyan.data;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,20 +15,27 @@ public class ResultInWeb {
     }
     public void setCode(String code) {
         this.code = code;
+        this.data.replace("code", this.code);
     }
     public String getMsg() {
         return msg;
     }
     public void setMsg(String msg) {
         this.msg = msg;
+        this.data.replace("msg", this.msg);
     }
 
     private final Map<String, Object> data = new HashMap<>();
     private final Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
+    private ResultInWeb(){}
+
     public ResultInWeb(String code, String msg) {
         this.code = code;
         this.msg = msg;
+
+        data.put("code", this.code);
+        data.put("msg", this.msg);
     }
 
     public static ResultInWeb success(){
@@ -47,14 +54,11 @@ public class ResultInWeb {
 
 
     public String jsonString() {
-        data.put("code", this.code);
-        data.put("msg", this.msg);
         return gson.toJson(data);
     }
 
-    public <V> ResultInWeb put(String key, V value) {
+    public <V> void put(String key, V value) {
         data.put(key, value);
-        return this;
     }
 
 }

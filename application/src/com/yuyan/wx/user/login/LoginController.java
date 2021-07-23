@@ -2,8 +2,8 @@ package com.yuyan.wx.user.login;
 
 import com.google.gson.JsonObject;
 import com.yuyan.room.*;
-import com.yuyan.wx.user.login.data.Result;
-import com.yuyan.wx.user.login.data.SessionKey;
+import com.yuyan.data.Result;
+import com.yuyan.wx.user.login.model.SessionKey;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.yuyan.springmvc.beans.AutoWired;
 import org.yuyan.springmvc.beans.TypeServletRequest;
@@ -27,6 +27,7 @@ public class LoginController {
 
     private static final UserDatabase database = UserDatabaseHelper.get();
 
+    @SuppressWarnings("unchecked")
     @RequestMapping("/wx/login.jsp")
     public String login(@RequestParam("code") String code){
         System.out.println("uri = " + ((HttpServletRequest)request).getRequestURI() + ", code = " + code);
@@ -35,13 +36,13 @@ public class LoginController {
         }
 
         JsonObject reDataJsonObject = new JsonObject();
-        Result<SessionKey> syncResult = loginService.request(code);
+        Result<?> syncResult = loginService.request(code);
 
         if (syncResult instanceof Result.Error) {
             reDataJsonObject.addProperty("code", "10001");
             reDataJsonObject.addProperty("msg", "error");
 
-            Exception exception = ((Result.Error) syncResult).getException();
+            Exception exception = ((Result.Error) syncResult).getError();
             exception.printStackTrace();
             return reDataJsonObject.toString();
         }

@@ -1,6 +1,7 @@
 package com.yuyan;
 
 import com.yuyan.room.UserDatabaseHelper;
+import com.yuyan.web.share.ShareFileManager;
 import org.yuyan.springmvc.starter.MiniApplication;
 
 public class Application {
@@ -9,5 +10,6 @@ public class Application {
         System.out.println("hello world");
         MiniApplication.run(Application.class, args);
         UserDatabaseHelper.init();
+        ShareFileManager.init();
     }
 }

@@ -13,10 +13,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class MappingHandler {
-    private String uri;
-    private Method method;
-    private Class<?> controller;
-    private String[] args;
+    private final String uri;
+    private final Method method;
+    private final Class<?> controller;
+    private final String[] args;
 
     public MappingHandler(String uri, Method method, Class<?> controller, String[] args) {
         this.uri = uri;
@@ -30,6 +30,9 @@ public class MappingHandler {
         if (uri == null || !uri.equals(requestUri)) {
             return false;
         }
+
+        res.setContentType("text/html;charset=UTF-8");
+        req.setCharacterEncoding("UTF-8");
 
         Object[] params = new Object[args.length];
         for (int i = 0; i < args.length; i++) {

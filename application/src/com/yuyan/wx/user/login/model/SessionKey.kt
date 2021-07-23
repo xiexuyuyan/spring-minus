@@ -1,4 +1,4 @@
-package com.yuyan.wx.user.login.data
+package com.yuyan.wx.user.login.model
 
 import com.google.gson.annotations.SerializedName
 

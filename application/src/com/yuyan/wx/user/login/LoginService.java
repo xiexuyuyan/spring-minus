@@ -1,8 +1,8 @@
 package com.yuyan.wx.user.login;
 
 import com.google.gson.Gson;
-import com.yuyan.wx.user.login.data.Result;
-import com.yuyan.wx.user.login.data.SessionKey;
+import com.yuyan.data.Result;
+import com.yuyan.wx.user.login.model.SessionKey;
 import okhttp3.*;
 import org.yuyan.springmvc.beans.Bean;
 
@@ -12,7 +12,7 @@ import java.util.Objects;
 @Bean
 @SuppressWarnings("unchecked")
 public class LoginService {
-    public Result<SessionKey> request(String code){
+    public Result<?> request(String code){
         String authUri = "https://api.weixin.qq.com/sns/jscode2session" +
                 "?appid=" + "" +
                 "&secret=" + "" +

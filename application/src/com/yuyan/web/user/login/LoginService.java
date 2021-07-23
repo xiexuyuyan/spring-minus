@@ -1,7 +1,7 @@
 package com.yuyan.web.user.login;
 
 import com.yuyan.room.*;
-import com.yuyan.web.user.data.Result;
+import com.yuyan.data.Result;
 import org.yuyan.springmvc.beans.Bean;
 
 @Bean
@@ -9,7 +9,7 @@ import org.yuyan.springmvc.beans.Bean;
 public class LoginService {
     private static final UserDatabase database = UserDatabaseHelper.get();
 
-    public Result<WebSession> loginByUid(int uid) {
+    public Result<?> loginByUid(int uid) {
         WebSession webSession = new WebSession();
         webSession.setUid(uid);
         while (true) {
@@ -38,7 +38,7 @@ public class LoginService {
         return new Result.Success<>(webSession);
     }
 
-    public Result<WebSession> loginByNameAndMail(String name, String mail) {
+    public Result<?> loginByNameAndMail(String name, String mail) {
         User user = database.userDao().getUserByNameAndMail(name, mail);
         if (user.getUid() == 0) {
             return new Result.Error(new Exception("null of this user: {name=" + name + ", mail=" + mail + "}"));
