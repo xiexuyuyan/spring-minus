@@ -10,7 +10,7 @@ import java.lang.Exception
 
 class FileDataSource {
     fun loadAllFile(uid: Int): Result<*> {
-        val rootDir = ShareFileManager.root()
+        val rootDir = ShareFileManager.root(uid) ?: return Result.Error(Exception("open user root dir failed"))
         val rootFiles: Array<File> = rootDir.listFiles()
                 ?: return Result.Error(Exception("null of the root directory"))
 

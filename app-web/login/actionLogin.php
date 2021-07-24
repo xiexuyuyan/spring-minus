@@ -26,7 +26,7 @@
     if (is_null($sessionKey)) {
 
     } else {
-        setcookie('session_key', $sessionKey, time()+3600*24*15);
+        setcookie('session_key', $sessionKey, time()+3600*24*15, '/');
     }
 
     echo substr($result, $responseHeaderSize, strlen($result));

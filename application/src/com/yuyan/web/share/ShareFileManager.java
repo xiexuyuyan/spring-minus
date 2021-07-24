@@ -23,4 +23,19 @@ public enum ShareFileManager {
     public static File root() {
         return INSTANCE.rootFileDirectory;
     }
+
+    public static File root(int uid) {
+        String userPath = INSTANCE.ROOT_PATH + uid;
+        File userRoot = new File(userPath);
+        if (userRoot.exists() && userRoot.isDirectory()) {
+            return userRoot;
+        }
+        if (userRoot.exists() && userRoot.isFile()) {
+            return null;
+        }
+        if (!userRoot.exists() && userRoot.mkdir()) {
+            return userRoot;
+        }
+        return null;
+    }
 }

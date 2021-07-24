@@ -9,7 +9,7 @@ import org.yuyan.springmvc.beans.Bean;
 public class LoginService {
     private static final UserDatabase database = UserDatabaseHelper.get();
 
-    public Result<?> loginByUid(int uid) {
+    private Result<?> login(int uid) {
         WebSession webSession = new WebSession();
         webSession.setUid(uid);
         while (true) {
@@ -25,12 +25,7 @@ public class LoginService {
         if (seed.getUid() != 0) {
             database.webSessionDao().update(webSession);
         } else {
-            User user = database.userDao().getUserByUid(uid);
-            if (user.getUid() != 0) {
-                database.webSessionDao().insert(webSession);
-            } else {
-                return new Result.Error(new Exception("null of this user: " + uid));
-            }
+            database.webSessionDao().insert(webSession);
         }
 
         Login login = Login.createCurrent(uid);
@@ -38,11 +33,20 @@ public class LoginService {
         return new Result.Success<>(webSession);
     }
 
+    public Result<?> loginByUid(int uid) {
+        User user = database.userDao().getUserByUid(uid);
+        if (user.getUid() != 0) {
+            return login(uid);
+        } else {
+            return new Result.Error(new Exception("null of this user: " + uid));
+        }
+    }
+
     public Result<?> loginByNameAndMail(String name, String mail) {
         User user = database.userDao().getUserByNameAndMail(name, mail);
         if (user.getUid() == 0) {
             return new Result.Error(new Exception("null of this user: {name=" + name + ", mail=" + mail + "}"));
         }
-        return loginByUid(user.getUid());
+        return login(user.getUid());
     }
 }

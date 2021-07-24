@@ -19,7 +19,7 @@ class ShareService {
         val loadResult = dataSource.loadAllFile(uid)
 
         if (loadResult is Result.Error) {
-            return ResultInWeb.error("10002", loadResult.error.toString())
+            return ResultInWeb.error().with("details", loadResult.error.message)
         }
 
         val success = loadResult as Result.Success<*>

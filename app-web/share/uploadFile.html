@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>upload file</title>
+    <script src="../libs/jquery-3.6.0/jquery-3.6.0.js"></script>
+    <script src="../libs/jquery-3.6.0/jquery.cookie.js"></script>
+    <script type="text/javascript">
+        function checkIfLogin(){
+          const sessionKey = $.cookie('session_key');
+          if (sessionKey == undefined) {
+            alert("You are not logged in!");
+            return false;
+          } else {
+            return true;
+          }
+        }
+    </script>
+</head>
+<body>
+<form action="actionUploadFile.php" method="post" enctype="multipart/form-data" target="uploadAlert" onsubmit="return checkIfLogin()">
+    <label for="file">Filename:</label>
+    <input type="file" name="file" id="file" />
+    <input type="submit" name="submit" value="submit" />
+</form>
+<iframe src="" frameborder="0" name="uploadAlert" style="width:300px;height:150px;background-color: #eee;"></iframe>
+</body>
+</html>
