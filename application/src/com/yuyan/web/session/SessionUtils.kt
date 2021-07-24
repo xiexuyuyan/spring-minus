@@ -15,7 +15,7 @@ fun getUidFromSession(request: HttpServletRequest, database: UserDatabase): Pair
 
     val webSession: WebSession = database.webSessionDao().getSessionBySessionKey(sessionKey.toInt())
     if (webSession.uid == 0) {
-        return Pair(0, ResultInWeb.create(10002).with("session_key", sessionKey))
+        return Pair(0, ResultInWeb.create(10002).with("details", "session_key: $sessionKey is not matches any user"))
     }
     return Pair(webSession.uid, ResultInWeb.success())
 }

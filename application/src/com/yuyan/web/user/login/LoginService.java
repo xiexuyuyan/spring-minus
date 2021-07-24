@@ -14,6 +14,9 @@ public class LoginService {
         webSession.setUid(uid);
         while (true) {
             int randomSessionUser = (int) (Math.random() * 10000) + 1;
+            if (randomSessionUser < 1000) {
+                randomSessionUser+=1000;
+            }
             WebSession seed = database.webSessionDao().getSessionBySessionKey(randomSessionUser);
             if (seed.getUid() == 0) {
                 webSession.setSessionKey(randomSessionUser);

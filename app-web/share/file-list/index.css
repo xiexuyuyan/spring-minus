@@ -1,0 +1,116 @@
+@import url("color.css");
+@import url("style.css");
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--color-bg-canvas);
+    color: var(--color-text-primary);
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.file-list-section{
+    // width: 375px;
+    // background-color: var(--color-scale-gray-0);
+}
+
+/*-----------------------box-----------------------*/
+.box-file-list {
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border-primary);
+    border-radius: 6px;
+}
+/*-----------------------row header-----------------------*/
+.box-header {
+    background-color: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border-primary);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    margin: -1px -1px 0;
+    padding: 16px;
+}
+/*-----------------------row header-----------------------*/
+
+
+/*-----------------------row body-----------------------*/
+.box-row {
+    display: flex!important;
+    position: relative!important;
+
+    border-top: 1px solid var(--color-border-secondary);
+    list-style-type: none;
+    margin-top: -1px;
+    padding: 16px;
+
+    padding-bottom: 8px!important;
+    padding-top: 8px!important;
+}
+.box-row:hover {
+    background-color: var(--color-bg-tertiary);
+}
+/*-----------------------row content-----------------------*/
+/*-----------------------row icon-----------------------*/
+.row-content-icon {
+    display: block;
+    margin-right: 16px!important;
+    flex-shrink: 0!important;
+}
+.octicon {
+    fill: currentColor;
+    display: inline-block;
+    overflow: visible!important;
+    vertical-align: text-bottom;
+}
+.octicon-file {
+    width: 16px;
+    height: 16px;
+}
+.octicon-file-directory {
+    width: 16px;
+    height: 16px;
+}
+.hx_color-icon-directory {
+    color: var(--color-icon-directory);
+}
+.color-icon-tertiary {
+    color: var(--color-icon-tertiary)!important;
+}
+/*-----------------------row icon-----------------------*/
+.text-auto-wrap {
+    word-wrap: break-word;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+/*-----------------------row name-----------------------*/
+.row-content-name {
+    display: block;
+    margin-right: 16px!important;
+    min-width: 0!important;
+    flex: auto!important;
+}
+.row-content-name-text {
+    vertical-align: top;
+}
+/*-----------------------row name-----------------------*/
+/*-----------------------row time-----------------------*/
+.row-content-time{
+    width: 150px;
+    text-align: right!important;
+    color: var(--color-text-tertiary)!important;
+}
+.row-content-time-text {
+    text-align: right!important;
+    vertical-align: top;
+
+    white-space: nowrap;
+}
+
+/*-----------------------row time-----------------------*/
+/*-----------------------row content-----------------------*/
+/*-----------------------row body-----------------------*/
+/*-----------------------box-----------------------*/

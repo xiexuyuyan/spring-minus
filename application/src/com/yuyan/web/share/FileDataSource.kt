@@ -17,7 +17,7 @@ class FileDataSource {
         val files = ArrayList<FileDescriptionInResult>()
 
         for (file in rootFiles) {
-            files.add(FileDescriptionInResult(file.name, file.lastModified(), file.canonicalPath, file.isFile))
+            files.add(FileDescriptionInResult(file.name, file.lastModified(), file.canonicalPath, if(file.isFile) 1 else 2))
         }
 
         return Result.Success(files)
