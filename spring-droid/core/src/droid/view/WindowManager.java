@@ -1,4 +1,4 @@
-package org.frame.view;
+package droid.view;
 
 public interface WindowManager extends ViewManager{
 }

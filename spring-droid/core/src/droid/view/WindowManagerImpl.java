@@ -1,6 +1,6 @@
-package org.frame.view;
+package droid.view;
 
-import org.frame.content.Context;
+import droid.content.Context;
 
 final public class WindowManagerImpl implements WindowManager{
     public WindowManagerImpl(Context context) {
