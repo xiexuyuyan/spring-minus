@@ -1,5 +1,13 @@
 rootProject.name = 'Vicar'
-include ':application'
-include ':spring-mvc'
-include ':room'
-include ':room-annotation-processor'
+
+include(':framework')
+include(':framework:droid:core')
+include(':framework:droid:services')
+
+include(':framework:spring:tomcat')
+
+include(':framework:jetpack:room:room')
+include(':framework:jetpack:room:room-annotation-processor')
+
+include(':app')
+include(':app:harp')

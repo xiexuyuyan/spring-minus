@@ -1,24 +1,72 @@
-plugins {
-    id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.3.72'
-    id 'org.jetbrains.kotlin.kapt' version '1.4.20'
+// declare the resource needed for build itself
+buildscript {
+    repositories {}
+    dependencies {}
 }
 
-group 'com.yuyan'
-version '1.0-SNAPSHOT'
+plugins {
+    id 'java'
+    id "org.jetbrains.kotlin.jvm" version "1.4.20"
+}
+
+version = ROOT_PROJECT_VERSION
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation(project(':framework:spring:tomcat'))
+    implementation(project(':framework:droid:core'))
+
+    // https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+    compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
 }
 
-compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+clean {
+    delete file("/out")
 }
 
-compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+sourceSets {
+    main {
+        java['srcDirs'] = ['vicar/src']
+        kotlin['srcDirs'] = ['vicar/src']
+        resources['srcDirs'] = ['vicar/res']
+    }
+}
+
+jar {
+    copy {
+        from('Vicar/libs/' + KOTLIN_STD_LIB)
+        into(rootProject.projectDir.path + '/out/libs/jvm')
+    }
+    copy {
+        from('Vicar/libs/' + 'javax.servlet-api-4.0.1.jar')
+        into(rootProject.projectDir.path + '/out/libs/jvm')
+    }
+
+    archiveClassifier.convention(ROOT_PROJECT_BUILD_VERSION)
+    archiveClassifier.set(ROOT_PROJECT_BUILD_VERSION)
+    manifest.attributes.put('Manifest-Version', project.version)
+    manifest.attributes.put('Main-Class', 'com.yuyan.vicar.Main')
+    manifest.attributes.put('Class-Path'
+            , ' '
+//            + 'libs/jvm/kotlin-stdlib-jdk8-1.5.30.jar'
+            + ' libs/framework/core-0.0.1-alpha.jar'
+            + ' libs/framework/services-0.0.1-alpha.jar'
+            + ' libs/framework/tomcat-0.0.1-alpha.jar'
+            + ' libs/framework/room-0.0.1-alpha.jar'
+            + ' libs/jvm/' + KOTLIN_STD_LIB
+            + ' libs/jvm/' + 'javax.servlet-api-4.0.1.jar'
+            + ' libs/mysql/mysql-connector-java-8.0.25.jar'
+            + ' libs/others/dom4j-2.1.3.jar'
+            + ' libs/tomcat/tomcat-embed-core-8.5.23.jar'
+    )
+
+    destinationDirectory.set(file(rootProject.projectDir.path + "/out"))
+
+    doLast {
+        println archiveFile.get()
+        println "jar tf ${archiveFile.get()}".execute().text.trim()
+    }
 }

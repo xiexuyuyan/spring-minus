@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+group 'org.yuyan'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    compile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '8.5.23'
+}
+
+sourceSets {
+    main {
+        java ['srcDirs'] = ['src']
+        kotlin ['srcDirs'] = ['src']
+        resources ['srcDirs'] = ['res']
+    }
+}
+
+jar {
+
+}
