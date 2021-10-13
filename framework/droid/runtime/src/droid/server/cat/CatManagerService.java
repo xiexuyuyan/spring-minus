@@ -51,19 +51,8 @@ public class CatManagerService extends CatManager{
         return it.equals(target);
     }
 
-    Argument[] wrapParams(Set<Map.Entry<String, String[]>> entries) {
-        Argument[] arguments = new Argument[entries.size()];
-        int i = 0;
-        for (Map.Entry<String, String[]> entry : entries) {
-            Argument argument = new Argument();
-            argument.setName(entry.getKey());
-            argument.setValue(entry.getValue()[0]);
-            arguments[i++] = argument;
-        }
-        return arguments;
-    }
 
-    Intent formatIntent(PackageInfo packageInfo, String requestUrl, Argument[] arguments) {
+    Intent formatIntent(PackageInfo packageInfo, String requestUrl, String[] argumentNames) {
         ControllerInfo tController = null;
         Action tAction = null;
 
@@ -71,7 +60,8 @@ public class CatManagerService extends CatManager{
         for (ControllerInfo controller : packageInfo.getControllers()) {
             for (Action action : controller.getActions()) {
                 System.out.println("action.getUrl() = " + action.getUrl());
-                if (action.getUrl().equals(requestUrl)) {
+                if (action.getUrl().equals(requestUrl)
+                        && ParameterUtil.match(argumentNames, action.getParameters())) {
                     tAction = action;
                     tController = controller;
                     break;
@@ -92,7 +82,6 @@ public class CatManagerService extends CatManager{
         ComponentName tComponentName = new ComponentName(tPkgName, tClassName);
         Intent tIntent = new Intent();
         tIntent.setComponent(tComponentName);
-        tAction.setArguments(arguments);
         tIntent.setAction(tAction);
 
         return tIntent;
@@ -108,6 +97,7 @@ public class CatManagerService extends CatManager{
 
         @Override
         public boolean handle(ServletRequest req, ServletResponse res) {
+            // 0. check package name & get package info
             HttpServletRequest request = (HttpServletRequest) req;
             String requestUrl = request.getRequestURI();
             System.out.println("requestUrl = " + requestUrl);
@@ -122,22 +112,28 @@ public class CatManagerService extends CatManager{
             PackageInfo packageInfo = packageManagerService.getPackageInfo(pkgName);
             System.out.println("packageInfo = " + packageInfo);
 
-            Map<String, String[]> parameterMap = request.getParameterMap();
-            for (Map.Entry<String, String[]> stringEntry : parameterMap.entrySet()) {
-                System.out.println("stringEntry.getKey() = " + stringEntry.getKey());
-                System.out.println("stringEntry.getValue() = " + Arrays.toString(stringEntry.getValue()));
+            // 1. get controller & action with parameter only
+            Map<String, String[]> argumentMap = request.getParameterMap();
+            String[] argumentNames = new String[argumentMap.size()];
+            int i = 0;
+            for (String s : argumentMap.keySet()) {
+                argumentNames[i++] = s;
             }
-            Argument[] arguments = wrapParams(parameterMap.entrySet());
-
-            Intent intent = formatIntent(packageInfo, requestUrl, arguments);
+            Intent intent = formatIntent(packageInfo, requestUrl, argumentNames);
             if (intent == null) {
                 return false;
             }
 
+            // 2. make arguments with parameter in intent.action
+            Parameter[] parameters = intent.getAction().getParameters();
+            Argument[] arguments = ParameterUtil.formatValues(argumentMap, parameters);
+            Action action = intent.getAction();
+            action.setArguments(arguments);
+            intent.setAction(action);
+
             ControllerManagerService cms =
                     (ControllerManagerService) context.getSystemService(Context.CONTROLLER_SERVICE);
             cms.executeController(threadMap.get(pkgName), intent);
-
             return true;
         }
     }

@@ -1,9 +1,8 @@
 package com.yuyan.harp;
 
-import com.yuyan.harp.room.User;
-import com.yuyan.harp.room.UserDatabaseHelper;
-import com.yuyan.harp.room.UserDatabase;
 import droid.app.Controller;
+
+import java.util.Arrays;
 
 public class MainController extends Controller {
 
@@ -15,15 +14,23 @@ public class MainController extends Controller {
         System.out.println("MainController onCreate() Thread.currentThread().getName() = " + Thread.currentThread().getName());
     }
 
-    public void getSalary(String uid, String name, String mail) {
+    public void getSalary(int uid, String name, String mail) {
         System.out.println("getSalary: uid = " + uid);
         System.out.println("getSalary: name = " + name);
         System.out.println("getSalary: mail = " + mail);
-
-        UserDatabaseHelper.init();
-        UserDatabase userDatabase = UserDatabaseHelper.get();
-        User user = userDatabase.userDao().getLastUser();
-        System.out.println("user = " + user);
+    }
+    public void getSalary(int uid, String name, String mail, boolean withTax) {
+        System.out.println("getSalary: uid = " + uid);
+        System.out.println("getSalary: name = " + name);
+        System.out.println("getSalary: mail = " + mail);
+        System.out.println("withTax = " + withTax);
+    }
+    public void getSalary(int uid, String name, String mail, boolean withTax, int[] days) {
+        System.out.println("getSalary: uid = " + uid);
+        System.out.println("getSalary: name = " + name);
+        System.out.println("getSalary: mail = " + mail);
+        System.out.println("withTax = " + withTax);
+        System.out.println("days = " + Arrays.toString(days));
     }
 
 }
