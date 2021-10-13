@@ -7,8 +7,7 @@ import com.droid.server.pm.PackageManagerService;
 import droid.app.Application;
 import droid.app.ContextThread;
 import droid.content.Context;
-import droid.content.Intent;
-import droid.content.pm.PackageInfo;
+import droid.server.pm.PackageInfo;
 
 import java.io.IOException;
 import java.util.ArrayList;

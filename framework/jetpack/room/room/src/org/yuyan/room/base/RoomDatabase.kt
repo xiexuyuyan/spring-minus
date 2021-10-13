@@ -9,8 +9,8 @@ abstract class RoomDatabase {
 
     class Builder<T : RoomDatabase>(private val klass: Class<T>, private val configure: DatabaseConfigure) {
 
-        fun build(classloader: ClassLoader): T {
-            val database: T = getGeneratedImplementation(classloader, klass, DB_IMPL_SUFFIX)
+        fun build(): T {
+            val database: T = getGeneratedImplementation(klass, DB_IMPL_SUFFIX)
             database.configure = configure
             return database
         }

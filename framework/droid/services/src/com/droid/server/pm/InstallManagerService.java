@@ -1,13 +1,11 @@
 package com.droid.server.pm;
 
-import com.droid.server.clz.ClassloaderManagerService;
 import droid.content.Action;
 import droid.content.ComponentName;
 import droid.content.Parameter;
-import droid.content.pm.ControllerInfo;
-import droid.content.pm.InstallManager;
-import droid.content.pm.PackageInfo;
-import javafx.util.Pair;
+import droid.server.pm.ControllerInfo;
+import droid.server.pm.InstallManager;
+import droid.server.pm.PackageInfo;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.DOMReader;

@@ -1,11 +1,7 @@
 package com.droid.server.clz;
 
-import droid.app.ContextThread;
-import droid.content.Context;
-import droid.content.Intent;
-import droid.content.clz.ClassloaderManager;
-import droid.content.pm.PackageInfo;
-import droid.content.pm.PackageManager;
+import droid.server.clz.ClassloaderManager;
+import droid.server.pm.PackageInfo;
 
 import java.net.MalformedURLException;
 import java.net.URL;

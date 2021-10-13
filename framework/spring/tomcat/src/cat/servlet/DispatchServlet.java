@@ -1,19 +1,15 @@
 package cat.servlet;
 
-import cat.handler.ServletHandler;
-import droid.app.Application;
+import cat.handler.HandlerMapper;
 
 import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Map;
 
 public class DispatchServlet implements Servlet {
-    private Application app;
+    private HandlerMapper mapper;
 
-    public DispatchServlet(Application app) {
-        this.app = app;
+    public DispatchServlet(HandlerMapper handlerMapper) {
+        mapper = handlerMapper;
     }
 
     @Override
@@ -30,8 +26,7 @@ public class DispatchServlet implements Servlet {
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
         res.setContentType("text/html;charset=UTF-8");
         req.setCharacterEncoding("UTF-8");
-
-        ServletHandler.handle(app, req, res);
+        mapper.handle(req, res);
     }
 
     @Override

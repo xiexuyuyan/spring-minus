@@ -5,24 +5,13 @@ import com.droid.server.pm.PackageManagerService;
 import droid.app.ContextThread;
 import droid.app.Controller;
 import droid.content.*;
-import droid.content.cm.ControllerManager;
-import droid.content.pm.ControllerInfo;
-import droid.content.pm.PackageInfo;
-import droid.content.pm.PackageManager;
+import droid.server.cm.ControllerManager;
+import droid.server.pm.ControllerInfo;
+import droid.server.pm.PackageInfo;
 import javafx.util.Pair;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.JarURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 public class ControllerManagerService extends ControllerManager {
     private Context mContext;

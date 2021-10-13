@@ -2,10 +2,9 @@ package com.droid.server.pm;
 
 import droid.content.Action;
 import droid.content.ComponentName;
-import droid.content.Intent;
-import droid.content.pm.ControllerInfo;
-import droid.content.pm.PackageInfo;
-import droid.content.pm.PackageManager;
+import droid.server.pm.ControllerInfo;
+import droid.server.pm.PackageInfo;
+import droid.server.pm.PackageManager;
 import javafx.util.Pair;
 
 import java.util.ArrayList;

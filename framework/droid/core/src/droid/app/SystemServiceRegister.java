@@ -1,17 +1,15 @@
 package droid.app;
 
 import droid.content.Context;
-import droid.content.clz.ClassloaderManager;
-import droid.content.cm.ControllerManager;
-import droid.content.pm.InstallManager;
-import droid.content.pm.PackageManager;
+import droid.server.clz.ClassloaderManager;
+import droid.server.cm.ControllerManager;
+import droid.server.pm.InstallManager;
+import droid.server.pm.PackageManager;
 import droid.view.WindowManager;
 import droid.view.WindowManagerImpl;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

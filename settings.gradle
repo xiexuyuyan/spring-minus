@@ -1,8 +1,10 @@
 rootProject.name = 'Vicar'
 
 include(':framework')
-include(':framework:droid:core')
-include(':framework:droid:services')
+//include(':framework:droid:core')
+//include(':framework:droid:services')
+include(':framework:droid:runtime')
+//include(':framework:droid:compile')
 
 include(':framework:spring:tomcat')
 

@@ -12,7 +12,8 @@ version '0.0.1'
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
-    implementation(project(':framework:droid:core'))
+//    implementation(project(':framework:droid:core'))
+    implementation(project(':framework:droid:runtime'))
     implementation(project(':framework:jetpack:room:room'))
     implementation(project(':framework:jetpack:room:room-annotation-processor'))
     kapt(project(':framework:jetpack:room:room-annotation-processor'))

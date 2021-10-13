@@ -2,7 +2,7 @@ package droid.app;
 
 import droid.content.Context;
 import droid.content.Intent;
-import droid.content.cm.ControllerManager;
+import droid.server.cm.ControllerManager;
 
 class ContextImpl extends Context {
     final Object[] mServiceCache = SystemServiceRegister.createServiceCache();

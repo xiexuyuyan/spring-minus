@@ -8,7 +8,7 @@ class Room {
         }
     }
 }
-fun <T, C> getGeneratedImplementation(classloader: ClassLoader, klass: Class<C>, suffix: String): T {
+fun <T, C> getGeneratedImplementation(klass: Class<C>, suffix: String): T {
     // todo(ensure correct full classname is posted to reflect method)
     val fullPackage = klass.getPackage().name
     val name = klass.canonicalName
@@ -27,6 +27,7 @@ fun <T, C> getGeneratedImplementation(classloader: ClassLoader, klass: Class<C>,
 
     @Suppress("UNCHECKED_CAST")
     println("fullClassName = $fullClassName")
+    val classloader = Thread.currentThread().contextClassLoader
     val tClass: Class<T> = classloader.loadClass(fullClassName) as Class<T>
     return tClass.newInstance()
 }

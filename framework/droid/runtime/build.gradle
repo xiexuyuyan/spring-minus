@@ -1,0 +1,51 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+version '0.0.1'
+
+dependencies {
+//    implementation(project(':framework:droid:compile'))
+    implementation(project(':framework:spring:tomcat'))
+    // https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+    compileOnly group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+
+    // https://mvnrepository.com/artifact/org.dom4j/dom4j
+    implementation group: 'org.dom4j', name: 'dom4j', version: '2.1.3'
+}
+
+sourceSets {
+    main {
+        java['srcDirs'] = ['src']
+        resources['srcDirs'] = ['res']
+    }
+}
+
+
+task clearSourceJar(type: Delete) {
+    delete file(rootProject.projectDir.path
+            + "/out/libs/framework/"
+            + "${project.name}-${project.version}-${BUILD_VERSION_ALPHA}.jar")
+}
+clean.dependsOn(clearSourceJar)
+
+jar {
+    copy {
+        from('libs/dom4j-2.1.3.jar')
+        into(rootProject.projectDir.path + '/out/libs/others')
+    }
+
+    archiveClassifier.convention(BUILD_VERSION_ALPHA)
+    archiveClassifier.set(BUILD_VERSION_ALPHA)
+    destinationDirectory.set(file(rootProject.projectDir.path + "/out/libs/framework"))
+    manifest.attributes.put('Manifest-Version', project.version)
+
+    doLast {
+        println archiveFile.get()
+        // println "jar tf ${archiveFile.get()}".execute().text.trim()
+    }
+}
