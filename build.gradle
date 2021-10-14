@@ -16,10 +16,7 @@ repositories {
 }
 
 dependencies {
-//    implementation(project(':framework:spring:tomcat'))
-//    implementation(project(':framework:droid:compile'))
     implementation(project(':framework:droid:runtime'))
-
     // https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
     compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
 }
@@ -52,10 +49,6 @@ jar {
     manifest.attributes.put('Main-Class', 'com.yuyan.vicar.Main')
     manifest.attributes.put('Class-Path'
             , ' '
-            + 'libs/jvm/kotlin-stdlib-jdk8-1.5.30.jar'
-//            + ' libs/framework/core-0.0.1-alpha.jar'
-//            + ' libs/framework/services-0.0.1-alpha.jar'
-//            + ' libs/framework/compile-0.0.1-alpha.jar'
             + ' libs/framework/runtime-0.0.1-alpha.jar'
             + ' libs/framework/tomcat-0.0.1-alpha.jar'
             + ' libs/framework/room-0.0.1-alpha.jar'

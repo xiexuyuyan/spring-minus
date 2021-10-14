@@ -71,43 +71,41 @@ public class ContextThread extends Thread{
             if (msg.what == ControllerManager.EXEC_CONTROLLER) {
                 Intent intent = (Intent) msg.obj;
                 System.out.println("intent = " + intent);
-                try {
-                    System.out.println("currentThread().getName() = " + currentThread().getName());
-                    ClassLoader classLoader = currentThread().getContextClassLoader();
-                    Class<?> clz_Controller = classLoader.loadClass(intent.getComponent().getClassName());
-                    Controller controller = (Controller) clz_Controller.newInstance();
-
-                    Action action = intent.getAction();
-                    Method method = null;
-                    if (action == null) {
-                        method = clz_Controller.getMethod("onCreate");
-                        method.invoke(controller);
-                    } else {
-                        String methodName = action.getName();
-                        Parameter[] parameters = action.getParameters();
-                        Argument[] arguments = action.getArguments();
-
-                        Class<?>[] paramsClzs = new Class[parameters.length];
-                        for (int i = 0; i < parameters.length; i++) {
-                            paramsClzs[i] = parameters[i].getTypeClz();
-                        }
-                        method = clz_Controller.getDeclaredMethod(methodName, paramsClzs);
-
-                        Object[] argv = new Object[arguments.length];
-                        for (int i = 0; i < arguments.length; i++) {
-                            argv[i] = arguments[i].getValue();
-                        }
-                        method.invoke(controller, argv);
-                    }
-
-                } catch (ClassNotFoundException
-                        | NoSuchMethodException
-                        | InstantiationException
-                        | IllegalAccessException
-                        | InvocationTargetException e) {
-                    e.printStackTrace();
-                }
+                handleExecController(intent);
             }
+        }
+    }
+
+    private void handleExecController(Intent intent) {
+        try {
+            System.out.println("currentThread().getName() = " + currentThread().getName());
+            ClassLoader classLoader = currentThread().getContextClassLoader();
+            Class<?> clz_Controller = classLoader.loadClass(intent.getComponent().getClassName());
+            Controller controller = (Controller) clz_Controller.newInstance();
+
+            Action action = intent.getAction();
+            String methodName = action.getName();
+            Parameter[] parameters = action.getParameters();
+            Argument[] arguments = action.getArguments();
+
+            Class<?>[] paramsClzs = new Class[parameters.length];
+            for (int i = 0; i < parameters.length; i++) {
+                paramsClzs[i] = parameters[i].getTypeClz();
+            }
+            Method method = clz_Controller.getDeclaredMethod(methodName, paramsClzs);
+
+            Object[] argv = new Object[arguments.length];
+            for (int i = 0; i < arguments.length; i++) {
+                argv[i] = arguments[i].getValue();
+            }
+            method.invoke(controller, argv);
+
+        } catch (ClassNotFoundException
+                | NoSuchMethodException
+                | InstantiationException
+                | IllegalAccessException
+                | InvocationTargetException e) {
+            e.printStackTrace();
         }
     }
 }
