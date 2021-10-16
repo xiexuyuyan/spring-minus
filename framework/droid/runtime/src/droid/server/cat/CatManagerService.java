@@ -46,8 +46,8 @@ public class CatManagerService extends CatManager{
     }
 
     boolean checkServletHandler(String it, String target) {
-        System.out.println("it = " + it);
-        System.out.println("target = " + target);
+        System.out.print("checkServletHandler(): it = " + it);
+        System.out.println(", target = " + target);
         return it.equals(target);
     }
 
@@ -56,10 +56,8 @@ public class CatManagerService extends CatManager{
         ControllerInfo tController = null;
         Action tAction = null;
 
-        System.out.println("requestUrl = " + requestUrl);
         for (ControllerInfo controller : packageInfo.getControllers()) {
             for (Action action : controller.getActions()) {
-                System.out.println("action.getUrl() = " + action.getUrl());
                 if (action.getUrl().equals(requestUrl)
                         && ParameterUtil.match(argumentNames, action.getParameters())) {
                     tAction = action;
@@ -73,6 +71,8 @@ public class CatManagerService extends CatManager{
         }
 
         if (tController == null) {
+            System.out.println("formatIntent(): pkg name in uri confirms is this pkg, requestUrl(exclude pkg name) = " + requestUrl);
+            System.out.println("formatIntent(): in package: " + packageInfo.getPkgName() + ", there is no suitable controller!");
             return null;
         }
 
@@ -100,9 +100,9 @@ public class CatManagerService extends CatManager{
             // 0. check package name & get package info
             HttpServletRequest request = (HttpServletRequest) req;
             String requestUrl = request.getRequestURI();
-            System.out.println("requestUrl = " + requestUrl);
             String requestPackageName = parsePackageName(requestUrl);
             if (!checkServletHandler(pkgName, requestPackageName)) {
+                System.out.println("ServletHandler:handle(): original requestUrl = " + requestUrl + ", cur sh's pkg is: " + pkgName);
                 return false;
             }
             requestUrl = parseUrl(request.getRequestURI());
@@ -110,7 +110,6 @@ public class CatManagerService extends CatManager{
             PackageManagerService packageManagerService =
                     (PackageManagerService) context.getSystemService(Context.PACKAGE_SERVICE);
             PackageInfo packageInfo = packageManagerService.getPackageInfo(pkgName);
-            System.out.println("packageInfo = " + packageInfo);
 
             // 1. get controller & action with parameter only
             Map<String, String[]> argumentMap = request.getParameterMap();

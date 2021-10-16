@@ -4,6 +4,7 @@ import droid.content.Argument;
 import droid.content.Parameter;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Map;
 
 public class ParameterUtil {
@@ -52,9 +53,9 @@ public class ParameterUtil {
 
     public static boolean match(String[] argumentNames, Parameter[] parameters) {
         if (argumentNames.length != parameters.length) {
+            System.out.println("parameters size not match");
             return false;
         }
-
         int i = 0;
         for (; i < parameters.length; i++) {
             String parameterName = parameters[i].getName();
@@ -70,7 +71,6 @@ public class ParameterUtil {
                 return false;
             }
         }
-
         return true;
     }
 }

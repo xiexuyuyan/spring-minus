@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<manifest package="com.yuyan.frown">
+    <controller name="com.yuyan.frown.MainController">
+        <action url="print.hello" name="printHello">
+            <parameter name="who" type="string[]"/>
+        </action>
+    </controller>
+</manifest>
+
+
+

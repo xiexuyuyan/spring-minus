@@ -31,17 +31,15 @@ public class PackageManagerService extends PackageManager {
         packageInfoList.add(packageInfo);
 
         JarPackage jarPackage = packageInfo.getJarPackage();
-        String projectDir = System.getProperty("user.dir");
         String jarFilePath = jarPackage.getFilePath();
         ClassLoader classLoader = createAppClassloader(new String[]{
-                projectDir + jarFilePath
+                jarFilePath
         });
         String[] clzNames = jarPackage.getClzNames();
         Class<?>[] clzs = new Class[clzNames.length];
         for (int i = 0; i < clzNames.length; i++) {
             String installClzName = clzNames[i];
-            System.out.println("installClzName = " + installClzName);
-            clzs[i] = classLoader.loadClass(clzNames[i]);
+            clzs[i] = classLoader.loadClass(installClzName);
         }
         jarPackage.setClzs(clzs);
         jarPackage.setClassLoader(classLoader);

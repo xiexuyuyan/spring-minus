@@ -2,6 +2,7 @@ package cat.handler;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,9 +12,16 @@ public class HandlerMapper {
     public void handle(ServletRequest req, ServletResponse res) {
         for (ServletHandler handler : handlers) {
             if (handler.handle(req, res)) {
-                break;
+                return;
             }
         }
+        String request = ((HttpServletRequest)req).getRequestURI();
+        System.out.print("暂无可匹配的服务: request = " + request);
+        System.out.print(", 参数 = ");
+        for (String s : req.getParameterMap().keySet()) {
+            System.out.print(s + ",");
+        }
+        System.out.println();
     }
 
     public void updateHandlerList(List<ServletHandler> handlerList) {

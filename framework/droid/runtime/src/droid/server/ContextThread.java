@@ -54,13 +54,13 @@ public class ContextThread extends Thread{
 
     private void attach(boolean system) {
         if (system) {
-            System.out.println("Thread:[" + Thread.currentThread().getName() + "], "
+            System.out.println("Thread[" + Thread.currentThread().getName() + "]:, "
                     + "system = " + system);
             System.out.println("In the original design, " + "\n" +
                     "    we are supposed to launch some system app to run sth, " + "\n" +
                     "    but at this point[just debug] we don't need to handle something.");
         } else {
-            System.out.println("Thread:[" + Thread.currentThread().getName() + "], "
+            System.out.println("Thread[" + Thread.currentThread().getName() + "]:, "
                     + "system = " + system);
         }
     }
@@ -70,7 +70,7 @@ public class ContextThread extends Thread{
         public void handleMessage(Message msg) {
             if (msg.what == ControllerManager.EXEC_CONTROLLER) {
                 Intent intent = (Intent) msg.obj;
-                System.out.println("intent = " + intent);
+                System.out.println("Thread[" + currentThread().getName() + "]: handleMessage(): EXEC_CONTROLLER");
                 handleExecController(intent);
             }
         }

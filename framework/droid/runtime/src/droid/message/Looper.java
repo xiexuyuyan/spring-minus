@@ -26,7 +26,7 @@ public class Looper {
 
     public static void prepare() {
         SET_THREAD_NAME = Thread.currentThread().getName();
-        System.out.println("Thread:[" + Thread.currentThread().getName() + "], "
+        System.out.println("Thread[" + Thread.currentThread().getName() + "]:, "
                 + "prepare: "+SET_THREAD_NAME);
         if (sThreadLocal.get() != null) {
             throw new RuntimeException("Only one Looper may be created per thread");

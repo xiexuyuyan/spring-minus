@@ -1,0 +1,34 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+repositories {
+    mavenCentral()
+}
+
+version '0.0.1'
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation(project(':framework:droid:runtime'))
+}
+
+sourceSets {
+    main {
+        java['srcDirs'] = ['src']
+        resources['srcDirs'] = ['res']
+    }
+}
+
+jar {
+    archiveClassifier.convention(BUILD_VERSION_ALPHA)
+    archiveClassifier.set(BUILD_VERSION_ALPHA)
+    manifest.attributes.put('Manifest-Version', project.version)
+    destinationDirectory.set(file(rootProject.projectDir.path + "/out/app/" + "com.yuyan.frown"))
+
+    doLast {
+        println archiveFile.get()
+        println "jar tf ${archiveFile.get()}".execute().text.trim()
+    }
+}

@@ -1,0 +1,11 @@
+"C:\Program Files\Java\jdk1.8.0_231\bin\javah" -jni -cp .\build\classes\java\main\;..\..\spring\tomcat\build\classes\java\main\ -d .\jni\ droid.server.SystemServer
+g++ -c -fPIC -I "C:\Program Files\Java\jdk1.8.0_231\include" -I "C:\Program Files\Java\jdk1.8.0_231\include\win32" -o ./jni/SystemServer.o ./jni/SystemServer.cpp
+g++ -Wl,--add-stdcall-alias -shared -o jni/SystemServer.dll jni/SystemServer.o
+"C:\Program Files\Java\jdk1.8.0_231\bin\java" -Djava.library.path=.\framework\droid\runtime\jni -jar .\out\Vicar-0.0.1-alpha.jar
+
+curl "http://localhost:6699/com.yuyan.harp/get_salary.json?uid=10&name=tom&mail=a@b.com"
+curl "http://localhost:6699/com.yuyan.frown/print.hello?who=tom"
+张三 =  %E5%BC%A0%E4%B8%89
+curl "http://localhost:6699/com.yuyan.frown/print.hello?who=tom&who=%E5%BC%A0%E4%B8%89"
+
+git commit -m "0.0.36 实现window下jni跨进程调用SystemServer安装jar包"

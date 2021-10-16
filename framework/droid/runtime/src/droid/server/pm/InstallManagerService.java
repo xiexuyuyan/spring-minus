@@ -24,8 +24,15 @@ import java.util.jar.JarFile;
 public class InstallManagerService extends InstallManager {
     @Override
     public PackageInfo load(String jarFilePath) throws IOException {
-        String projectDir = System.getProperty("user.dir");
-        JarFile jarFile = performJarFile(projectDir + jarFilePath);
+        // String projectDir = System.getProperty("user.dir");
+
+        File file = new File(jarFilePath);
+        if (!file.exists()) {
+            System.out.println("jarFilePath = " + jarFilePath + " not exists!");
+            return null;
+        }
+
+        JarFile jarFile = performJarFile(jarFilePath);
 
         assert jarFile != null;
         PackageInfo packageInfo = performPackage(jarFile);
@@ -39,10 +46,16 @@ public class InstallManagerService extends InstallManager {
     @Override
     public PackageInfo[] load(String[] jarFilePaths) throws IOException {
         PackageInfo[] packages = new PackageInfo[jarFilePaths.length];
-        for (int i = 0; i < jarFilePaths.length; i++) {
-            packages[i] = load(jarFilePaths[i]);
+        int j = 0;
+        for (String jarFilePath : jarFilePaths) {
+            PackageInfo packageInfo = load(jarFilePath);
+            if (packageInfo != null) {
+                packages[j++] = packageInfo;
+            }
         }
-        return packages;
+        PackageInfo[] packagesRe = new PackageInfo[j];
+        System.arraycopy(packages, 0, packagesRe, 0, packagesRe.length);
+        return packagesRe;
     }
 
     private JarFile performJarFile(String jarFilePath) throws IOException {
