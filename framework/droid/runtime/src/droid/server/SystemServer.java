@@ -63,7 +63,7 @@ public class SystemServer {
         // todo("Load the APPs through configuration")
         String projectDir = System.getProperty("user.dir");
         String[] jarFilePaths = new String[]{
-                projectDir + "/out/app/com.yuyan.harp/harp-0.0.1-alpha.jar"
+                projectDir + "/out/app/com.yuyan.harp/harp-0.0.1-alpha.jar",
         };
 
         Installer.run(mSystemContext, jarFilePaths);

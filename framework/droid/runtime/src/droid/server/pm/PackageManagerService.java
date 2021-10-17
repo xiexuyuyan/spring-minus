@@ -13,6 +13,7 @@ import java.util.List;
 public class PackageManagerService extends PackageManager {
     private final List<PackageInfo> packageInfoList = new ArrayList<>();
 
+    @Override
     public PackageInfo getPackageInfo(String pkgName) {
         for (PackageInfo packageInfo : packageInfoList) {
             if (packageInfo.getPkgName().equals(pkgName)) {

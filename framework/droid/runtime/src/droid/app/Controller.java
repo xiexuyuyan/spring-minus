@@ -9,7 +9,10 @@ public abstract class Controller extends ContextWrapper {
 
     public Controller() {}
     public void onCreate(){
-        System.out.println("controller super");
+        System.out.println("controller onCreate() super");
+    }
+    public void onStart(){
+        System.out.println("controller onStart super");
     }
 
     @Override

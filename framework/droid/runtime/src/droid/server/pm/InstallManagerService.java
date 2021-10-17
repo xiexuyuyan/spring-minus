@@ -22,14 +22,26 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class InstallManagerService extends InstallManager {
+    private final List<String> installedJarFilePathPreference = new ArrayList<>();
+
     @Override
     public PackageInfo load(String jarFilePath) throws IOException {
         // String projectDir = System.getProperty("user.dir");
 
         File file = new File(jarFilePath);
         if (!file.exists()) {
-            System.out.println("jarFilePath = " + jarFilePath + " not exists!");
+            System.out.println("InstallManagerService()jarFilePath = " + jarFilePath + " not exists!");
             return null;
+        } else {
+            String fileName = file.getName();
+            String absolutePath = file.getAbsolutePath();
+            for (String s : installedJarFilePathPreference) {
+                if (s.equals(absolutePath)) {
+                    System.out.println("InstallManagerService():can't install file which has the same preference is already installed in system. absolutePath = " + absolutePath);
+                    return null;
+                }
+            }
+            installedJarFilePathPreference.add(file.getAbsolutePath());
         }
 
         JarFile jarFile = performJarFile(jarFilePath);
@@ -146,6 +158,16 @@ public class InstallManagerService extends InstallManager {
         String pkgName = rootElement.attribute("package").getValue();
         packageInfo.setPkgName(pkgName);
 
+        String applicationName = null;
+        Iterator<Element> applicationIterator = rootElement.elementIterator("application");
+        while (applicationIterator.hasNext()) {
+            Element controllerElement = applicationIterator.next();
+            applicationName = controllerElement.attributeValue("name");
+        }
+        if (applicationName != null) {
+            packageInfo.setApplicationClassName(applicationName);
+        }
+
         Iterator<Element> controllerIterator = rootElement.elementIterator("controller");
         List<ControllerInfo> controllers = new ArrayList<>();
         while (controllerIterator.hasNext()) {
@@ -214,5 +236,45 @@ public class InstallManagerService extends InstallManager {
         org.w3c.dom.Document doc = db.parse(inputStream);
         DOMReader domReader = new DOMReader();
         return domReader.read((org.w3c.dom.Document) doc);
+    }
+
+    @Override
+    public InputStream getResourceStream(String jarFilePath, String targetResourceName) {
+        try {
+            JarFile jarFile = performJarFile(jarFilePath);
+            if (jarFile == null) {
+                return null;
+            }
+            return loadResource(jarFile, targetResourceName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private InputStream loadResource(JarFile jarFile, String targetResourceName)
+            throws IOException {
+        Enumeration<JarEntry> jarEntries = jarFile.entries();
+        JarEntry manifestEntry = null;
+        while (jarEntries.hasMoreElements()) {
+            JarEntry jarEntry = jarEntries.nextElement();
+
+            if (jarEntry.isDirectory()) {
+                continue;
+            }
+
+            String entryName = jarEntry.getName();
+            // System.out.println("loadResource entryName = " + entryName);
+            if (entryName.equals(targetResourceName)) {
+                manifestEntry = jarEntry;
+                break;
+            }
+        }
+
+        if (manifestEntry == null) {
+            return null;
+        }
+
+        return jarFile.getInputStream(manifestEntry);
     }
 }

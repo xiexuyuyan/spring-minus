@@ -10,6 +10,16 @@ public class PackageInfo {
     private String pkgName;
     private String pkgPath;
 
+    private String applicationClassName;
+
+    public PackageInfo setApplicationClassName(String name) {
+        this.applicationClassName = name;
+        return this;
+    }
+    public String getApplicationClassName() {
+        return applicationClassName;
+    }
+
     private ControllerInfo[] controllers;
 
     private JarPackage jarPackage;
@@ -93,6 +103,7 @@ public class PackageInfo {
         }
         return "pkgName = " + pkgName
                 + ", pkgPath = " + pkgPath
+                + ", application = " + applicationClassName
                 + ", controllers = [" + controllersString + "]";
     }
 

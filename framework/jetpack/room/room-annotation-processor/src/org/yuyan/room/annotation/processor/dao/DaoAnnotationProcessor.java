@@ -84,7 +84,7 @@ public class DaoAnnotationProcessor extends AbstractProcessor implements DaoProc
             JavaFile.Builder fileBuilder = JavaFile.builder(pkgName, containerClassBuilder.build());
             JavaFile javaFile = fileBuilder.build();
             try {
-                javaFile.writeTo(System.out);
+                // javaFile.writeTo(System.out);
                 javaFile.writeTo(processingEnv.getFiler());
             } catch (IOException e) {
                 e.printStackTrace();

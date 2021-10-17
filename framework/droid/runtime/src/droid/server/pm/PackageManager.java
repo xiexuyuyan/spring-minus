@@ -15,5 +15,7 @@ public abstract class PackageManager {
         this.context = context;
     }
 
+    public abstract PackageInfo getPackageInfo(String pkgName);
+
     public abstract ClassLoader install(PackageInfo packageInfo) throws MalformedURLException, ClassNotFoundException;
 }

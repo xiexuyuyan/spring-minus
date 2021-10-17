@@ -19,6 +19,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CatManagerService extends CatManager{
     private TomcatServer mTomcatServer;
     private final Map<String, ContextThread> threadMap = new ConcurrentHashMap<>();
+    // TODO: 2021/10/16 创建一个专属的管理线程的manager
+    @Override
+    public ContextThread getThread(String pkgName) {
+        return threadMap.get(pkgName);
+    }
 
     CatManagerService(Context context) {
         super(context);
@@ -40,6 +45,7 @@ public class CatManagerService extends CatManager{
         ServletHandler sh = new SH(pkgName);
         ContextThread contextThread = new ContextThread(false, pkgName);
         contextThread.setContextClassLoader(classLoader);
+        contextThread.attachBaseContext(context);
         contextThread.start();
         threadMap.put(pkgName, contextThread);
         mTomcatServer.registerServletHandler(sh);
@@ -55,14 +61,19 @@ public class CatManagerService extends CatManager{
     Intent formatIntent(PackageInfo packageInfo, String requestUrl, String[] argumentNames) {
         ControllerInfo tController = null;
         Action tAction = null;
-
+        System.out.println("formatIntent() try requestUrl = " + requestUrl);
         for (ControllerInfo controller : packageInfo.getControllers()) {
+            System.out.println("formatIntent() try controller = " + controller.getClassName());
             for (Action action : controller.getActions()) {
+                System.out.println("formatIntent() try action = " + action.getUrl());
                 if (action.getUrl().equals(requestUrl)
                         && ParameterUtil.match(argumentNames, action.getParameters())) {
                     tAction = action;
                     tController = controller;
                     break;
+                }
+                if (action.getUrl().equals(requestUrl)) {
+                    System.out.println("formatIntent() try action = " + action.getUrl() + ":url match");
                 }
             }
             if (tController != null) {

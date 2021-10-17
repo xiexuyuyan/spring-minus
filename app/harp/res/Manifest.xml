@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <manifest package="com.yuyan.harp">
+    <application name="com.yuyan.harp.application.HarpApplication"/>
+
     <controller name="com.yuyan.harp.MainController">
         <action url="get_salary.json" name="getSalary">
             <parameter name="uid" type="int"/>
@@ -20,7 +22,13 @@
             <parameter name="days" type="int[]"/>
         </action>
     </controller>
+
+    <controller name="com.yuyan.harp.user.UserController">
+        <action url="login.jsp" name="loginByNameAndMail">
+            <parameter name="name" type="string"/>
+            <parameter name="mail" type="string"/>
+        </action>
+    </controller>
+
+
 </manifest>
-
-
-

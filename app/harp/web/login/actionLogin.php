@@ -3,7 +3,7 @@
     $jsonString = file_get_contents("php://input");
     // 2. 初始话curl，设置请求链接
     $curl = curl_init();
-    curl_setopt($curl, CURLOPT_URL, 'http://localhost:6699/web/login.jsp');
+    curl_setopt($curl, CURLOPT_URL, 'http://localhost:6699/com.yuyan.harp/login.jsp');
     // 3. 将json data转置为curl post请求的参数列表
     $reString = "";
     $jsonObject = json_decode($jsonString, true);

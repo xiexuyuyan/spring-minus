@@ -59,7 +59,7 @@ public class DatabaseAnnotationProcessor extends AbstractProcessor implements Da
             JavaFile.Builder fileBuilder = JavaFile.builder(pkgName, containerClassBuilder.build());
             JavaFile javaFile = fileBuilder.build();
             try {
-                javaFile.writeTo(out);
+                // javaFile.writeTo(System.out);
                 javaFile.writeTo(processingEnv.getFiler());
             } catch (IOException e) {
                 e.printStackTrace();

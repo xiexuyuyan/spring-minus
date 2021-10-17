@@ -6,7 +6,7 @@ import droid.server.SystemServiceRegister;
 public class ContextImpl extends Context{
     public final Object[] mServiceCache;
 
-    ContextImpl parent;
+    Context parent;
     ContextThread contextThread;
     PackageInfo packageInfo;
 
@@ -19,13 +19,13 @@ public class ContextImpl extends Context{
         return new ContextImpl(null, null, null);
     }
 
-    public static ContextImpl createAppContext(ContextImpl parent
+    public static ContextImpl createAppContext(Context parent
             , ContextThread contextThread
             , PackageInfo packageInfo) {
         return new ContextImpl(parent, contextThread, packageInfo);
     }
 
-    public ContextImpl(ContextImpl parent
+    public ContextImpl(Context parent
             , ContextThread contextThread
             , PackageInfo packageInfo) {
         this.parent = parent;
@@ -33,7 +33,8 @@ public class ContextImpl extends Context{
         this.packageInfo = packageInfo;
 
         if (parent != null) {
-            mServiceCache = parent.mServiceCache;
+            ContextImpl parentImpl = (ContextImpl) parent;
+            mServiceCache = parentImpl.mServiceCache;
         } else {
             mServiceCache = SystemServiceRegister.createServiceCache();
         }
