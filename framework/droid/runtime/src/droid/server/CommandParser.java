@@ -15,7 +15,7 @@ public class CommandParser {
         String cm = "cm create com.yuyan.harp/.MainController";
         String pm = "pm install /user/download/some.jar";*/
         String[] commands = cmd.split(" ");
-        System.out.println("commands = " + Arrays.toString(commands));
+        System.out.println("CommandParser run commands = " + Arrays.toString(commands));
 
         if (commands.length < 2) {
             System.out.println("Illegal commands!");
@@ -23,7 +23,7 @@ public class CommandParser {
         }
 
         int cmdNum = parseCommand(commands);
-        System.out.println("cmd = " + cmdNum);
+        System.out.println("CommandParser run cmd = " + cmdNum);
         switch (cmdNum) {
             case PM_INSTALL:
                 handlePmInstall(context, commands);

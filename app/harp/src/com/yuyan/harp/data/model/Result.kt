@@ -1,4 +1,4 @@
-package com.yuyan.harp.model
+package com.yuyan.harp.data.model
 
 
 open class Result<T> // hide the private constructor to limit subclass types (Success, Error)

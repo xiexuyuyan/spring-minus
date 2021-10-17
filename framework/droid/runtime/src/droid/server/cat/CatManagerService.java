@@ -65,7 +65,7 @@ public class CatManagerService extends CatManager{
         for (ControllerInfo controller : packageInfo.getControllers()) {
             System.out.println("formatIntent() try controller = " + controller.getClassName());
             for (Action action : controller.getActions()) {
-                System.out.println("formatIntent() try action = " + action.getUrl());
+                System.out.println("formatIntent() try action = " + action.getUrl() + ", method name = " + action.getName());
                 if (action.getUrl().equals(requestUrl)
                         && ParameterUtil.match(argumentNames, action.getParameters())) {
                     tAction = action;

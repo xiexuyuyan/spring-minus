@@ -1,13 +1,9 @@
 package com.yuyan.harp;
 
-import com.yuyan.harp.driver.ResultState;
+import com.yuyan.harp.data.driver.ResultState;
 import droid.app.Controller;
-import droid.server.pm.InstallManager;
 
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.Arrays;
-import java.util.Properties;
 
 public class MainController extends Controller {
     String threadName = Thread.currentThread().getName();

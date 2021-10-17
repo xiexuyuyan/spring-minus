@@ -1,4 +1,4 @@
-package com.yuyan.harp.driver;
+package com.yuyan.harp.data.driver;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,7 +6,6 @@ import java.util.Properties;
 
 public enum ResultState {
     INSTANCE;
-
 
     private final Properties properties;
 
@@ -21,10 +20,7 @@ public enum ResultState {
             e.printStackTrace();
         }
     }
-    public static void init(){
-        InputStream in = INSTANCE.getClass().getResourceAsStream("/properties/web.result.code.properties");
-        init(in);
-    }
+
     public static String get(String key){
         return INSTANCE.properties.getProperty(key);
     }

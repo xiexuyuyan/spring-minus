@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <manifest package="com.yuyan.harp">
-    <application name="com.yuyan.harp.application.HarpApplication"/>
+    <application name="com.yuyan.harp.application.MainApplication"/>
 
     <controller name="com.yuyan.harp.MainController">
         <action url="get_salary.json" name="getSalary">
@@ -24,9 +24,14 @@
     </controller>
 
     <controller name="com.yuyan.harp.user.UserController">
-        <action url="login.jsp" name="loginByNameAndMail">
+        <!-- login by @name and @mail -->
+        <action url="login.jsp" name="login">
             <parameter name="name" type="string"/>
             <parameter name="mail" type="string"/>
+        </action>
+        <!-- login by @uid -->
+        <action url="login.jsp" name="login">
+            <parameter name="uid" type="string"/>
         </action>
     </controller>
 

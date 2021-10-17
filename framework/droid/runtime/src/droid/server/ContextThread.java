@@ -77,7 +77,7 @@ public class ContextThread extends Thread{
                 mContext = ContextImpl.createAppContext(mSystemContext, this, packageInfo);
                 String applicationClassName = packageInfo.getApplicationClassName();
                 if (applicationClassName != null) {
-                    makeApplication(mContext, applicationClassName);
+                    mApplication = makeApplication(mContext, applicationClassName);
                 }
             }
 

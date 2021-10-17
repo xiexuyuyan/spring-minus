@@ -1,8 +1,8 @@
-package com.yuyan.harp.model;
+package com.yuyan.harp.data.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.yuyan.harp.driver.ResultState;
+import com.yuyan.harp.data.driver.ResultState;
 
 import java.util.HashMap;
 import java.util.Map;
