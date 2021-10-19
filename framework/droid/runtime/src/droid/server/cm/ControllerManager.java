@@ -10,6 +10,6 @@ public abstract class ControllerManager {
 
 
     public abstract void executeController(ContextThread thread, Intent intent);
-    public abstract void executeOnCreate(ContextThread thread, String className);
-    public abstract void executeOnStart(ContextThread thread, String className);
+    public abstract void executeOnCreate(ContextThread thread, Intent intent);
+    public abstract void executeOnStart(ContextThread thread, Intent intent);
 }

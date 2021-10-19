@@ -36,4 +36,11 @@ public class ComponentName {
                 ", mClassName='" + mClassName + '\'' +
                 '}';
     }
+    public String formatFullClassName() {
+        if (mClassName.startsWith(mPackageName)) {
+            return mClassName;
+        } else {
+            return mPackageName + mClassName;
+        }
+    }
 }

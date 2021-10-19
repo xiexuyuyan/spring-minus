@@ -1,6 +1,8 @@
 package droid.server;
 
+import droid.content.ComponentName;
 import droid.content.Context;
+import droid.content.Intent;
 import droid.content.PackageInfo;
 import droid.server.cat.CatManager;
 import droid.server.cm.ControllerManager;
@@ -67,7 +69,9 @@ public class CommandParser {
                         "there is not existing package " + packageName + " be loaded.");
                 return;
             }
-            cm.executeOnCreate(targetThread, fullClassName);
+            ComponentName componentName = new ComponentName(packageName, fullClassName);
+            Intent intent = new Intent(componentName);
+            cm.executeOnCreate(targetThread, intent);
         }
 
     }
@@ -93,8 +97,10 @@ public class CommandParser {
             System.out.println("fullClassName = " + fullClassName);
 
             ContextThread targetThread = catManager.getThread(packageName);
-            cm.executeOnCreate(targetThread, fullClassName);
-            cm.executeOnStart(targetThread, fullClassName);
+            ComponentName componentName = new ComponentName(packageName, fullClassName);
+            Intent intent = new Intent(componentName);
+            cm.executeOnCreate(targetThread, intent);
+            cm.executeOnStart(targetThread, intent);
         }
     }
 

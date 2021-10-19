@@ -7,20 +7,22 @@ import droid.server.ContextThread;
 
 public class ControllerManagerService extends ControllerManager {
     @Override
-    public void executeOnCreate(ContextThread thread, String className) {
+    public void executeOnCreate(ContextThread thread, Intent intent) {
         Handler handler = thread.getHandler();
         Message message = new Message();
         message.what = EXEC_CONTROLLER_CREATE;
-        message.obj = className;
+        message.obj = intent;
+        System.out.println("Thread[" + Thread.currentThread().getName() + "]:sendMessage() " + message.what);
         handler.sendMessage(message);
     }
 
     @Override
-    public void executeOnStart(ContextThread thread, String className) {
+    public void executeOnStart(ContextThread thread, Intent intent) {
         Handler handler = thread.getHandler();
         Message message = new Message();
         message.what = EXEC_CONTROLLER_START;
-        message.obj = className;
+        message.obj = intent;
+        System.out.println("Thread[" + Thread.currentThread().getName() + "]:sendMessage() " + message.what);
         handler.sendMessage(message);
     }
 
@@ -30,6 +32,7 @@ public class ControllerManagerService extends ControllerManager {
         Message message = new Message();
         message.what = EXEC_CONTROLLER;
         message.obj = intent;
+        System.out.println("Thread[" + Thread.currentThread().getName() + "]:sendMessage() " + message.what);
         handler.sendMessage(message);
     }
 }

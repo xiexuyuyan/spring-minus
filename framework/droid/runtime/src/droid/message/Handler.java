@@ -23,7 +23,6 @@ public abstract class Handler {
     public abstract void handleMessage(Message msg);
 
     public boolean sendMessage(Message msg) {
-        System.out.println("Thread[" + Thread.currentThread().getName() + "]:sendMessage() ");
         MessageQueue queue = mQueue;
         if (queue == null) {
             throw new NullPointerException("queue in Handler:sendMessage()");

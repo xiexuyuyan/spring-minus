@@ -9,6 +9,7 @@ import droid.message.Message;
 import cat.handler.ServletHandler;
 import droid.server.cm.ControllerManager;
 import droid.server.cm.ControllerManagerService;
+import droid.server.cm.ControllerRecord;
 import droid.server.pm.PackageManager;
 import droid.server.pm.PackageManagerService;
 
@@ -23,6 +24,8 @@ public class ContextThread extends Thread{
 
     Context mSystemContext;
     Context mContext;// app context
+
+    ControllerRecord controllerRecord;
 
     Application mApplication;
 
@@ -79,6 +82,7 @@ public class ContextThread extends Thread{
                 if (applicationClassName != null) {
                     mApplication = makeApplication(mContext, applicationClassName);
                 }
+                controllerRecord = new ControllerRecord();
             }
 
 
@@ -89,21 +93,19 @@ public class ContextThread extends Thread{
         @Override
         public void handleMessage(Message msg) {
             String threadName = currentThread().getName();
+            System.out.println("Thread[" + threadName + "]: handleMessage(): " + msg.what);
+            Intent intent;
             switch (msg.what) {
                 case ControllerManager.EXEC_CONTROLLER_CREATE:
-                    String classNameCreate = (String) msg.obj;
-                    System.out.println("Thread[" + threadName + "]: handleMessage(): EXEC_CONTROLLER_CREATE" +
-                            ", class name = " + classNameCreate);
-                    handleExecControllerCreate(classNameCreate);
+                    intent = (Intent) msg.obj;
+                    handleExecControllerCreate(intent);
                     break;
                 case ControllerManager.EXEC_CONTROLLER_START:
-                    String classNameStart = (String) msg.obj;
-                    System.out.println("Thread[" + threadName + "]: handleMessage(): EXEC_CONTROLLER_START" +
-                            ", class name = " + classNameStart);
-                    handleExecControllerStart(classNameStart);
+                    intent = (Intent) msg.obj;
+                    handleExecControllerStart(intent);
                     break;
                 case ControllerManager.EXEC_CONTROLLER:
-                    Intent intent = (Intent) msg.obj;
+                    intent = (Intent) msg.obj;
                     System.out.println("Thread[" + currentThread().getName() + "]: handleMessage(): EXEC_CONTROLLER");
                     handleExecController(intent);
                     break;
@@ -113,40 +115,18 @@ public class ContextThread extends Thread{
         }
     }
 
-    private void handleExecControllerStart(String classNameStart) {
-        try {
-            ClassLoader classLoader = currentThread().getContextClassLoader();
-            Class<?> clz_Controller = classLoader.loadClass(classNameStart);
-            Controller controller = (Controller) clz_Controller.newInstance();
-            Method method_onCreate = clz_Controller.getDeclaredMethod("onCreate");
-            Method method_onStart = clz_Controller.getDeclaredMethod("onStart");
-            method_onCreate.invoke(controller);
-            method_onStart.invoke(controller);
-
-        } catch (ClassNotFoundException
-                | NoSuchMethodException
-                | InstantiationException
-                | IllegalAccessException
-                | InvocationTargetException e) {
-            e.printStackTrace();
-        }
+    private void handleExecControllerStart(Intent intent) {
+        Controller controller = controllerRecord.getController(intent.getComponent());
+        ControllerRecord.Lifecycle.onStart(controller);
     }
 
-    private void handleExecControllerCreate(String classNameCreate) {
-        try {
-            ClassLoader classLoader = currentThread().getContextClassLoader();
-            Class<?> clz_Controller = classLoader.loadClass(classNameCreate);
-            Controller controller = (Controller) clz_Controller.newInstance();
-            Method method_onCreate = clz_Controller.getDeclaredMethod("onCreate");
-            method_onCreate.invoke(controller);
+    private void handleExecControllerCreate(Intent intent) {
+        Controller controller = controllerRecord.getController(intent.getComponent());
+        ControllerRecord.Lifecycle.onCreate(controller);
+    }
 
-        } catch (ClassNotFoundException
-                | NoSuchMethodException
-                | InstantiationException
-                | IllegalAccessException
-                | InvocationTargetException e) {
-            e.printStackTrace();
-        }
+    private void handleExecController(Intent intent) {
+        ControllerRecord.Lifecycle.exec(intent);
     }
 
     private Application makeApplication(Context appContext, String applicationClassName) {
@@ -170,35 +150,4 @@ public class ContextThread extends Thread{
         return application;
     }
 
-    private void handleExecController(Intent intent) {
-        try {
-            ClassLoader classLoader = currentThread().getContextClassLoader();
-            Class<?> clz_Controller = classLoader.loadClass(intent.getComponent().getClassName());
-            Controller controller = (Controller) clz_Controller.newInstance();
-
-            Action action = intent.getAction();
-            String methodName = action.getName();
-            Parameter[] parameters = action.getParameters();
-            Argument[] arguments = action.getArguments();
-
-            Class<?>[] paramsClzs = new Class[parameters.length];
-            for (int i = 0; i < parameters.length; i++) {
-                paramsClzs[i] = parameters[i].getTypeClz();
-            }
-            Method method = clz_Controller.getDeclaredMethod(methodName, paramsClzs);
-
-            Object[] argv = new Object[arguments.length];
-            for (int i = 0; i < arguments.length; i++) {
-                argv[i] = arguments[i].getValue();
-            }
-            method.invoke(controller, argv);
-
-        } catch (ClassNotFoundException
-                | NoSuchMethodException
-                | InstantiationException
-                | IllegalAccessException
-                | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-    }
 }

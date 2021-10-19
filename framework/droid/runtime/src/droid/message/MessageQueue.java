@@ -6,16 +6,16 @@ public class MessageQueue {
     public Message next() {
         synchronized (this) {
             for (;;) {
-                try {
-                    this.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 Message msg = mMessages;
                 if (msg != null) {
                     mMessages = msg.next;
                     msg.next = null;
                     return msg;
+                }
+                try {
+                    this.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }
