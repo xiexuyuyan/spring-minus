@@ -13,6 +13,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ControllerRecord {
     Map<ComponentName, Controller> controllerMap = new ConcurrentHashMap<>();
 
+    public ControllerRecord(Context context) {
+        appContext = context;
+    }
+
+    Context appContext;
+
     public Controller getController(ComponentName target) {
         for (ComponentName key : controllerMap.keySet()) {
             if (key.formatFullClassName().equals(target.formatFullClassName())) {
@@ -36,10 +42,20 @@ public class ControllerRecord {
         try {
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
             Class<?> clz_Controller = classLoader.loadClass(componentName.formatFullClassName());
-            return (Controller) clz_Controller.newInstance();
+
+            Controller controller = (Controller) clz_Controller.newInstance();
+
+            Class<?> clz_ControllerParent = Controller.class;
+            Method method_attach = clz_ControllerParent.getDeclaredMethod("attachBaseContext", Context.class);
+            method_attach.setAccessible(true);
+            method_attach.invoke(controller, appContext);
+
+            return controller;
         } catch (ClassNotFoundException
                 | InstantiationException
-                | IllegalAccessException e) {
+                | IllegalAccessException
+                | NoSuchMethodException
+                | InvocationTargetException e) {
             e.printStackTrace();
         }
         return null;
@@ -67,16 +83,18 @@ public class ControllerRecord {
                 e.printStackTrace();
             }
         }
-        public static void exec(Intent intent) {
+        public static void exec(Context context, Controller controller, Intent intent) {
             try {
-                ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                Class<?> clz_Controller = classLoader.loadClass(intent.getComponent().getClassName());
-                Controller controller = (Controller) clz_Controller.newInstance();
-
+                Class<?> clz_Controller = controller.getClass();
                 Action action = intent.getAction();
                 String methodName = action.getName();
                 Parameter[] parameters = action.getParameters();
                 Argument[] arguments = action.getArguments();
+
+                Class<?> clz_ControllerParent = Controller.class;
+                Method method_attach = clz_ControllerParent.getDeclaredMethod("attach", Context.class, Intent.class);
+                method_attach.setAccessible(true);
+                method_attach.invoke(controller, context, intent);
 
                 Class<?>[] paramsClzs = new Class[parameters.length];
                 for (int i = 0; i < parameters.length; i++) {
@@ -90,9 +108,7 @@ public class ControllerRecord {
                 }
                 method.invoke(controller, argv);
 
-            } catch (ClassNotFoundException
-                    | NoSuchMethodException
-                    | InstantiationException
+            } catch (NoSuchMethodException
                     | IllegalAccessException
                     | InvocationTargetException e) {
                 e.printStackTrace();

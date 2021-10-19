@@ -5,6 +5,8 @@ import com.yuyan.harp.data.model.Result;
 import com.yuyan.harp.data.model.ResultInWeb;
 import com.yuyan.harp.room.WebSession;
 import droid.app.Controller;
+import droid.content.Context;
+import droid.content.WebIntent;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -13,8 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 public class UserController extends Controller {
 
     LoginService loginService;
-    private ServletRequest request;
-    private ServletResponse response;
 
     @Override
     public void onCreate() {
@@ -24,6 +24,20 @@ public class UserController extends Controller {
     public void login(String name, String mail) {
         System.out.println("loginByNameAndMail():name = " + name + ", mail = " + mail);
         System.out.println("ResultState.get(10000) = " + ResultState.get(10000 + ""));
+
+
+        WebIntent intent = (WebIntent) getIntent();
+        ServletRequest request = intent.getRequest();
+        ServletResponse response = intent.getResponse();
+        String uid = request.getParameter("uid");
+        String _name = request.getParameter("name");
+        String _mail = request.getParameter("mail");
+
+        System.out.println("_mail = " + _mail);
+        System.out.println("_name = " + _name);
+        System.out.println("uid = " + uid);
+        Context context = getBaseContext();
+        System.out.println("context = " + context);
     }
     public void login(String uid) {
         System.out.println("uid = " + uid);
@@ -31,6 +45,9 @@ public class UserController extends Controller {
     }
 
     public String _login() {
+        WebIntent intent = (WebIntent) getIntent();
+        ServletRequest request = intent.getRequest();
+        ServletResponse response = intent.getResponse();
         String uid = request.getParameter("uid");
         String name = request.getParameter("name");
         String mail = request.getParameter("mail");

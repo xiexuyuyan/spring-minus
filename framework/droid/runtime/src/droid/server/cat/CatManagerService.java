@@ -141,9 +141,15 @@ public class CatManagerService extends CatManager{
             action.setArguments(arguments);
             intent.setAction(action);
 
+            WebIntent webIntent = new WebIntent();
+            webIntent.setAction(intent.getAction());
+            webIntent.setComponent(intent.getComponent());
+            webIntent.setRequest(req);
+            webIntent.setResponse(res);
+
             ControllerManagerService cms =
                     (ControllerManagerService) context.getSystemService(Context.CONTROLLER_SERVICE);
-            cms.executeController(threadMap.get(pkgName), intent);
+            cms.executeController(threadMap.get(pkgName), webIntent);
             return true;
         }
     }

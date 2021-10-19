@@ -82,7 +82,7 @@ public class ContextThread extends Thread{
                 if (applicationClassName != null) {
                     mApplication = makeApplication(mContext, applicationClassName);
                 }
-                controllerRecord = new ControllerRecord();
+                controllerRecord = new ControllerRecord(mContext);
             }
 
 
@@ -126,7 +126,8 @@ public class ContextThread extends Thread{
     }
 
     private void handleExecController(Intent intent) {
-        ControllerRecord.Lifecycle.exec(intent);
+        Controller controller = controllerRecord.getController(intent.getComponent());
+        ControllerRecord.Lifecycle.exec(mContext, controller, intent);
     }
 
     private Application makeApplication(Context appContext, String applicationClassName) {
