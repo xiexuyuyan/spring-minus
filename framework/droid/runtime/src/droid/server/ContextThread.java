@@ -138,7 +138,8 @@ public class ContextThread extends Thread{
             application = (Application) clz_Application.newInstance();
             application.attachBaseContext(appContext);
 
-            Method method = clz_Application.getDeclaredMethod("onCreate");
+            Class<?> clz_Application_P = Application.class;
+            Method method = clz_Application_P.getDeclaredMethod("onCreate");
             method.invoke(application);
 
         } catch (ClassNotFoundException

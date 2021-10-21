@@ -1,8 +1,6 @@
 rootProject.name = 'Vicar'
 
 include(':framework')
-//include(':framework:droid:core')
-//include(':framework:droid:services')
 include(':framework:droid:runtime')
 //include(':framework:droid:compile')
 
@@ -12,5 +10,4 @@ include(':framework:jetpack:room:room')
 include(':framework:jetpack:room:room-annotation-processor')
 
 include(':app')
-include(':app:harp')
 include(':app:frown')

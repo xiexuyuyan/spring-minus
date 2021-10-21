@@ -28,6 +28,7 @@ public class ControllerRecord {
 
         Controller controller = controllerMap.get(target);
         if (controller != null) {
+            controller.onStart();
             return controller;
         }
         controller = makeController(target);
@@ -35,6 +36,9 @@ public class ControllerRecord {
         ComponentName s = new ComponentName(target.getPackageName(), target.getClassName());
         controllerMap.put(s, controller);
 
+        assert controller != null;
+        controller.onCreate();
+        controller.onStart();
         return controller;
     }
 
@@ -63,7 +67,7 @@ public class ControllerRecord {
     public static class Lifecycle {
         public static void onCreate(Controller controller) {
             try {
-                Class<?> clz_Controller = controller.getClass();
+                Class<?> clz_Controller = Controller.class;
                 Method method_onCreate = clz_Controller.getDeclaredMethod("onCreate");
                 method_onCreate.invoke(controller);
             } catch (NoSuchMethodException
@@ -74,7 +78,7 @@ public class ControllerRecord {
         }
         public static void onStart(Controller controller) {
             try {
-                Class<?> clz_Controller = controller.getClass();
+                Class<?> clz_Controller = Controller.class;
                 Method method_onStart = clz_Controller.getDeclaredMethod("onStart");
                 method_onStart.invoke(controller);
             } catch (NoSuchMethodException
