@@ -55,6 +55,8 @@ public class EntityAnnotationProcessor extends AbstractProcessor implements Enti
                 ColumnInfo columnInfo = variableElement.getAnnotation(ColumnInfo.class);
                 if (columnInfo != null) {
                     columnName = columnInfo.name();
+                } else {
+                    continue;
                 }
 
                 PrimaryKey primaryKey = variableElement.getAnnotation(PrimaryKey.class);
