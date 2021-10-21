@@ -41,6 +41,9 @@ jar {
     copy {
         from('Vicar/libs/' + 'javax.servlet-api-4.0.1.jar')
         into(rootProject.projectDir.path + '/out/libs/jvm')
+
+        from('Vicar/libs/' + 'gson-2.8.7.jar')
+        into(rootProject.projectDir.path + '/out/libs/others')
     }
 
     archiveClassifier.convention(ROOT_PROJECT_BUILD_VERSION)
@@ -56,6 +59,7 @@ jar {
             + ' libs/jvm/' + 'javax.servlet-api-4.0.1.jar'
             + ' libs/mysql/mysql-connector-java-8.0.25.jar'
             + ' libs/others/dom4j-2.1.3.jar'
+            + ' libs/others/gson-2.8.7.jar'
             + ' libs/tomcat/tomcat-embed-core-8.5.23.jar'
     )
 

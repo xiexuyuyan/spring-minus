@@ -63,7 +63,7 @@ public class SystemServer {
         // todo("Load the APPs through configuration")
         String projectDir = System.getProperty("user.dir");
         String[] jarFilePaths = new String[]{
-                projectDir + "/out/app/com.yuyan.harp/harp-0.0.1-alpha.jar",
+                projectDir + "/out/app/com.yuyan.harp/Harp-0.0.1-alpha.jar",
         };
 
         Installer.run(mSystemContext, jarFilePaths);
@@ -136,6 +136,24 @@ public class SystemServer {
                 ClassLoader classloader = pms.install(packageInfo);
                 catManager.registerServletHandler(packageInfo);
                 clzMS.addClassloader(packageInfo.getPkgName(), classloader);
+            }
+        }
+
+
+        static void load(Context context, String[] jarFilePaths) {
+            try {
+                _load(context, jarFilePaths);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private static void _load(Context context, String[] jarFilePaths) throws IOException, ClassNotFoundException {
+            InstallManagerService ims =
+                    (InstallManagerService) context.getSystemService(Context.INSTALL_SERVICE);
+            PackageInfo[] packageInfoList = ims.load(jarFilePaths);
+            for (PackageInfo packageInfo : packageInfoList) {
+                System.out.println("SystemServer load() packageInfo = " + packageInfo);
             }
         }
     }

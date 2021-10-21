@@ -30,6 +30,9 @@ public class CommandParser {
             case PM_INSTALL:
                 handlePmInstall(context, commands);
                 break;
+            case PM_LOAD:
+                handlePmLoad(context, commands);
+                break;
             case CM_CREATE:
                 handleCmCreate(context, commands);
                 break;
@@ -111,9 +114,17 @@ public class CommandParser {
         System.out.println("Thread[" + threadName + "]: handlePmInstall():jarPkgPaths = " + Arrays.toString(jarPkgPaths));
         SystemServer.Installer.run(context, jarPkgPaths);
     }
+    private static void handlePmLoad(Context context, String[] commands) {
+        String[] jarPkgPaths = new String[commands.length - 2];
+        System.arraycopy(commands, 2, jarPkgPaths, 0, commands.length - 2);
+        String threadName = Thread.currentThread().getName();
+        System.out.println("Thread[" + threadName + "]: handlePmInstall():jarPkgPaths = " + Arrays.toString(jarPkgPaths));
+        SystemServer.Installer.load(context, jarPkgPaths);
+    }
 
     private static final int ERROR = 0;
     private static final int PM_INSTALL = 20001;
+    private static final int PM_LOAD = 20002;
     private static final int CM_CREATE = 10001;
     private static final int CM_START = 10002;
     private static final String CM_STRING = "cm";
@@ -134,6 +145,8 @@ public class CommandParser {
         String second = cmd[1];
         if (second.equals("install")) {
             return PM_INSTALL;
+        } else if (second.equals("load")) {
+            return PM_LOAD;
         }
         return 0;
     }
