@@ -1,0 +1,1 @@
+./gradlew :framework:droid:runtime:test --tests "com.yuyan.test.LooperTest.createNewMessage" --info
